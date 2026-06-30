@@ -249,7 +249,10 @@ export default function LandingPage() {
               <img src="/logo.png" alt="" className="h-5 w-5 rounded" />
               <span>Neural Flow — See AI Think</span>
             </div>
-            <p>Built with Edu Alt Tech</p>
+            <div className="flex items-center gap-3">
+              <p>Built with Edu Alt Tech</p>
+              <a href="https://github.com/ukk1019-yhat" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Git</a>
+            </div>
           </div>
         </footer>
       </main>
