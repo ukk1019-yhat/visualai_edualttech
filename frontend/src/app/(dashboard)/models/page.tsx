@@ -9,6 +9,13 @@ import { Tabs } from '@/components/ui/Tabs';
 
 const allModels = [
   {
+    id: 'nemotron-3-ultra', name: 'Nemotron 3 Ultra', provider: 'NVIDIA', icon: '🟢',
+    latency: '0.6s', cost: 'Free', context: '128K',
+    capabilities: ['Free', '550B MoE', 'Fast', 'Reasoning'],
+    color: 'from-green-500 to-emerald-500',
+    description: 'NVIDIA\'s most powerful Nemotron, 550B MoE model — free tier on OpenRouter.',
+  },
+  {
     id: 'gemma-4-31b-it', name: 'Gemma 4 31B', provider: 'Google', icon: '💎',
     latency: '0.8s', cost: 'Free', context: '1M',
     capabilities: ['Free', '1M Context', 'Latest', 'Reasoning'],
@@ -30,13 +37,6 @@ const allModels = [
     description: 'Google\'s well-rounded open model with strong quality.',
   },
   {
-    id: 'nemotron-70b', name: 'Nemotron 70B', provider: 'NVIDIA', icon: '🟢',
-    latency: '0.9s', cost: 'Free', context: '128K',
-    capabilities: ['Free', 'Fast', 'Code', 'Reasoning'],
-    color: 'from-green-500 to-emerald-500',
-    description: 'NVIDIA\'s Llama 3.1 Nemotron instruct model, optimized for speed — free on OpenRouter.',
-  },
-  {
     id: 'llama-3.1-70b', name: 'Llama 3.1 70B', provider: 'Meta', icon: '🦙',
     latency: '1.5s', cost: 'Free (Open Source)', context: '128K',
     capabilities: ['Open Source', 'Code', 'Reasoning', 'On-premise'],
@@ -53,7 +53,7 @@ const allModels = [
 ];
 
 export default function ModelsPage() {
-  const [selected, setSelected] = useState('gemma-4-31b-it');
+  const [selected, setSelected] = useState('nemotron-3-ultra');
   const [filter, setFilter] = useState('all');
 
   const filtered = filter === 'all' ? allModels : allModels.filter((m) => m.provider.toLowerCase() === filter);

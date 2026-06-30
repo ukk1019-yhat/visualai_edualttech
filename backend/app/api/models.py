@@ -22,6 +22,14 @@ class ModelsResponse(BaseModel):
 async def list_models():
     models = [
         ModelInfo(
+            id="nemotron-3-ultra",
+            name="Nemotron 3 Ultra",
+            provider="nvidia",
+            description="NVIDIA's 550B MoE model — free tier on OpenRouter",
+            context_window=131072,
+            pricing={"input": 0.0, "output": 0.0},
+        ),
+        ModelInfo(
             id="gemma-4-31b-it",
             name="Gemma 4 31B",
             provider="google",
@@ -42,14 +50,6 @@ async def list_models():
             name="Gemma 3 12B",
             provider="google",
             description="Google's well-rounded open model",
-            context_window=131072,
-            pricing={"input": 0.0, "output": 0.0},
-        ),
-        ModelInfo(
-            id="nemotron-70b",
-            name="Nemotron 70B",
-            provider="nvidia",
-            description="NVIDIA's Llama-based instruct model — free on OpenRouter",
             context_window=131072,
             pricing={"input": 0.0, "output": 0.0},
         ),

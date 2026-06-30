@@ -12,7 +12,7 @@ const endpoints = [
     path: '/api/chat',
     desc: 'Send a prompt and get a response with visualization data',
     auth: 'API Key',
-    body: JSON.stringify({ prompt: 'Explain gravity', model: 'gemma-4-31b-it', stream: false }, null, 2),
+    body: JSON.stringify({ prompt: 'Explain gravity', model: 'nemotron-3-ultra', stream: false }, null, 2),
     response: JSON.stringify({
       id: 'msg_123',
       content: 'Gravity is a fundamental force...',
@@ -32,7 +32,7 @@ const endpoints = [
     path: '/api/tokenize',
     desc: 'Tokenize text and return detailed token information',
     auth: 'None',
-    body: JSON.stringify({ text: 'I love AI', model: 'gemma-4-31b-it' }, null, 2),
+    body: JSON.stringify({ text: 'I love AI', model: 'nemotron-3-ultra' }, null, 2),
     response: JSON.stringify({
       tokens: [
         { id: 342, text: 'I', position: 0 },
@@ -51,7 +51,7 @@ const endpoints = [
     body: null,
     response: JSON.stringify({
       models: [
-        { id: 'gemma-4-31b-it', name: 'Gemma 4 31B', provider: 'google', context_window: 1048576, pricing: { input: 0.0, output: 0.0 } },
+        { id: 'nemotron-3-ultra', name: 'Nemotron 3 Ultra', provider: 'nvidia', context_window: 131072, pricing: { input: 0.0, output: 0.0 } },
         { id: 'llama-3.1-70b', name: 'Llama 3.1 70B', provider: 'meta', context_window: 128000, pricing: { input: 0.0, output: 0.0 } },
       ],
     }, null, 2),
@@ -170,7 +170,7 @@ export default function ApiPage() {
 {`curl -X POST https://api.neuralflow.dev/chat \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
-  -d '{"prompt": "Explain gravity", "model": "gemma-4-31b-it"}'`}
+  -d '{"prompt": "Explain gravity", "model": "nemotron-3-ultra"}'`}
           </pre>
         </CardContent>
       </GlassCard>

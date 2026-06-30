@@ -11,7 +11,7 @@ ai_service = AIService()
 
 class ChatRequest(BaseModel):
     prompt: str
-    model: str = "google/gemma-4-31b-it:free"
+    model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
     stream: bool = False
 
 

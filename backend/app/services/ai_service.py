@@ -26,6 +26,7 @@ class AIService:
             "gemma-4-31b-it": "google/gemma-4-31b-it:free",
             "gemma-4-26b-a4b-it": "google/gemma-4-26b-a4b-it:free",
             "gemma-3-12b-it": "google/gemma-3-12b-it",
+            "nemotron-3-ultra": "nvidia/nemotron-3-ultra-550b-a55b:free",
             "gpt-4o": "openai/gpt-4o",
             "gpt-4o-mini": "openai/gpt-4o-mini",
             "gpt-4-turbo": "openai/gpt-4-turbo",
@@ -34,7 +35,6 @@ class AIService:
             "claude-3-haiku": "anthropic/claude-3-haiku",
             "gemini-1.5-pro": "google/gemini-1.5-pro",
             "gemini-1.5-flash": "google/gemini-1.5-flash",
-            "nemotron-70b": "nvidia/llama-3.1-nemotron-70b-instruct",
             "llama-3.1-70b": "meta-llama/llama-3.1-70b-instruct",
             "llama-3.1-8b": "meta-llama/llama-3.1-8b-instruct",
             "mistral-large": "mistralai/mistral-large",
@@ -50,7 +50,7 @@ class AIService:
     async def generate(
         self,
         prompt: str,
-        model: str = "google/gemma-4-31b-it:free",
+        model: str = "nvidia/nemotron-3-ultra-550b-a55b:free",
         max_tokens: Optional[int] = 2048,
     ) -> dict:
         await self._init_openrouter()
@@ -101,13 +101,13 @@ class AIService:
             "google/gemma-4-31b-it:free": {"input": 0.0, "output": 0.0},
             "google/gemma-4-26b-a4b-it:free": {"input": 0.0, "output": 0.0},
             "google/gemma-3-12b-it": {"input": 0.0, "output": 0.0},
+            "nvidia/nemotron-3-ultra-550b-a55b:free": {"input": 0.0, "output": 0.0},
             "openai/gpt-4o": {"input": 0.0000025, "output": 0.00001},
             "openai/gpt-4o-mini": {"input": 0.00000015, "output": 0.0000006},
             "anthropic/claude-3-opus": {"input": 0.000015, "output": 0.000075},
             "anthropic/claude-3-sonnet": {"input": 0.000003, "output": 0.000015},
             "google/gemini-1.5-pro": {"input": 0.0000035, "output": 0.0000105},
             "google/gemini-1.5-flash": {"input": 0.00000035, "output": 0.00000105},
-            "nvidia/llama-3.1-nemotron-70b-instruct": {"input": 0.0, "output": 0.0},
             "meta-llama/llama-3.1-70b-instruct": {"input": 0.00000059, "output": 0.00000079},
             "meta-llama/llama-3.1-8b-instruct": {"input": 0.00000006, "output": 0.00000006},
         }

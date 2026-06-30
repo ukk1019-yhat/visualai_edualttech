@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     OPENROUTER_SITE_NAME: str = "NeuralFlow"
 
     # Default model
-    DEFAULT_MODEL: str = "google/gemma-4-31b-it:free"
+    DEFAULT_MODEL: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
 
     class Config:
         env_file = ".env"
