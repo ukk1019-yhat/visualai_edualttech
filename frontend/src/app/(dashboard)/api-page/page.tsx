@@ -93,7 +93,7 @@ export default function ApiPage() {
       <div className="space-y-1">
         <h1 className="text-xl sm:text-2xl font-bold">API</h1>
         <p className="text-sm text-muted-foreground">
-          Integrate NeuralFlow visualizations into your own applications.
+          Integrate EAT Neural Flow visualizations into your own applications.
         </p>
       </div>
 

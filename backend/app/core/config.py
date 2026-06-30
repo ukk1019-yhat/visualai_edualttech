@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     OPENROUTER_API_KEY: str = ""
     OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
     OPENROUTER_SITE_URL: str = "http://localhost:3000"
-    OPENROUTER_SITE_NAME: str = "NeuralFlow"
+    OPENROUTER_SITE_NAME: str = "EAT Neural Flow"
 
     # Default model
     DEFAULT_MODEL: str = "nvidia/nemotron-3-ultra-550b-a55b:free"

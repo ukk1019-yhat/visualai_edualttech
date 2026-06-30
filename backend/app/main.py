@@ -5,7 +5,7 @@ from app.api import chat, tokenize, visualize, models
 from app.core.config import settings
 
 app = FastAPI(
-    title="NeuralFlow API",
+    title="EAT Neural Flow API",
     description="AI Visualization Platform Backend",
     version="0.1.0",
 )

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NeuralFlow — See AI Think",
+  title: "EAT Neural Flow — See AI Think",
   description: "Visualize every step of artificial intelligence. Watch tokens, neurons, attention heads, and decisions in real-time.",
 };
 

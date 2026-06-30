@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <nav className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-4 h-16 shrink-0 border-b border-border">
         <div className="w-3 h-3 rounded-full bg-[var(--neon-blue)] shadow-[0_0_8px_var(--neon-blue)] shrink-0" />
-        {!collapsed && <span className="font-bold text-lg tracking-tight">NeuralFlow</span>}
+        {!collapsed && <span className="font-bold text-lg tracking-tight">EAT Neural Flow</span>}
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 space-y-6 scrollbar-thin">
