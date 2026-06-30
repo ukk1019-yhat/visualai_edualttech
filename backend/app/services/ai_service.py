@@ -7,12 +7,15 @@ from app.core.config import settings
 
 class AIService:
     def __init__(self):
-        self.gemini_client = None
+        self.client = None
 
-    async def _init_gemini(self):
-        if not self.gemini_client and settings.GOOGLE_API_KEY:
-            from google import genai
-            self.gemini_client = genai.aio.Client(api_key=settings.GOOGLE_API_KEY)
+    async def _init_client(self):
+        if not self.client and settings.GOOGLE_API_KEY:
+            from openai import AsyncOpenAI
+            self.client = AsyncOpenAI(
+                api_key=settings.GOOGLE_API_KEY,
+                base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+            )
 
     async def simulate_step(self, step_id: str) -> None:
         delay = random.uniform(0.02, 0.15)
@@ -24,23 +27,22 @@ class AIService:
         model: str = "gemini-2.0-flash",
         max_tokens: Optional[int] = 2048,
     ) -> dict:
-        await self._init_gemini()
+        await self._init_client()
         start = time.time()
 
-        if self.gemini_client:
+        if self.client:
             try:
-                response = await self.gemini_client.models.generate_content(
+                response = await self.client.chat.completions.create(
                     model=model,
-                    contents=prompt,
-                    config={"max_output_tokens": max_tokens},
+                    messages=[{"role": "user", "content": prompt}],
+                    max_tokens=max_tokens,
                 )
                 latency = (time.time() - start) * 1000
-                content = response.text or ""
-                usage = response.usage_metadata
-                pt = usage.prompt_token_count if usage else 0
-                ct = usage.candidates_token_count if usage else 0
+                usage = response.usage
+                pt = usage.prompt_tokens if usage else 0
+                ct = usage.completion_tokens if usage else 0
                 return {
-                    "content": content,
+                    "content": response.choices[0].message.content or "",
                     "prompt_tokens": pt,
                     "completion_tokens": ct,
                     "latency": latency,
