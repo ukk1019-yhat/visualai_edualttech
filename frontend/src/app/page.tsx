@@ -249,7 +249,7 @@ export default function LandingPage() {
               <img src="/logo.png" alt="" className="h-5 w-5 rounded" />
               <span>Neural Flow — See AI Think</span>
             </div>
-            <p>Built with Next.js, FastAPI, and Three.js</p>
+            <p>Built with Edu Alt Tech</p>
           </div>
         </footer>
       </main>
