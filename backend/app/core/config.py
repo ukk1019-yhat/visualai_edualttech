@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3001"]
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/neuralflow"
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:Ukk%407337580095@qbgjtymjmzzmpmpgyxeg.supabase.co:6543/postgres"
     REDIS_URL: str = "redis://localhost:6379/0"
 
     # AI Providers

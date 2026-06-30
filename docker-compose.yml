@@ -19,24 +19,14 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/neuralflow
       - REDIS_URL=redis://redis:6379/0
     depends_on:
-      - db
       - redis
     env_file:
       - .env
 
-  db:
-    image: postgres:16-alpine
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=neuralflow
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+  # PostgreSQL is hosted on Supabase — no local db service needed
+  # DATABASE_URL is loaded from .env
 
   redis:
     image: redis:7-alpine
@@ -46,5 +36,4 @@ services:
       - redis_data:/data
 
 volumes:
-  postgres_data:
   redis_data:
