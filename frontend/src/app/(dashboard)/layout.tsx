@@ -66,8 +66,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const sidebarContent = (
     <nav className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-4 h-16 shrink-0 border-b border-border">
-        <Link href="/">
-          <img src="/logo.svg" alt="Neural Flow" className="h-7" />
+        <Link href="/" className="flex items-center gap-3">
+          <img src="/logo.png" alt="" className="h-7 w-7 rounded-lg" />
+          <span className="font-bold text-lg tracking-tight">Neural Flow</span>
         </Link>
       </div>
 
