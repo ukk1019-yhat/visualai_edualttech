@@ -65,7 +65,7 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <img src="/logo.svg" alt="EAT Neural Flow" className="h-7" />
+            <img src="/logo.svg" alt="Neural Flow" className="h-7" />
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <ThemeToggleLanding />
@@ -245,7 +245,7 @@ export default function LandingPage() {
         <footer className="border-t border-border py-8 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
-              <img src="/logo.svg" alt="EAT Neural Flow" className="h-5" />
+              <img src="/logo.svg" alt="Neural Flow" className="h-5" />
             </div>
             <p>Built with Next.js, FastAPI, and Three.js</p>
           </div>

@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <nav className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-4 h-16 shrink-0 border-b border-border">
         <Link href="/">
-          <img src="/logo.svg" alt="EAT Neural Flow" className="h-7" />
+          <img src="/logo.svg" alt="Neural Flow" className="h-7" />
         </Link>
       </div>
 
