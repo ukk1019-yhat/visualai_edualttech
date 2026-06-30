@@ -2,12 +2,12 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Input } from '@/components/ui/Input';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
-const NUM_STEPS = 5;
-const HIDDEN_SIZE = 4;
+const DEFAULT_SEQUENCE = [0.1, 0.8, 0.3, 0.9, 0.2];
 
 type RNNState = {
   input: number;
@@ -21,11 +21,6 @@ type RNNState = {
   };
 };
 
-function generateInput(step: number): number {
-  const vals = [0.1, 0.8, 0.3, 0.9, 0.2];
-  return vals[step] ?? 0.5;
-}
-
 function sigmoid(x: number): number {
   return 1 / (1 + Math.exp(-x));
 }
@@ -37,12 +32,14 @@ function tanh(x: number): number {
 function computeRNNStep(
   input: number,
   prevHidden: number[],
-  step: number
+  step: number,
+  hiddenSize: number
 ): RNNState {
-  const hidden = prevHidden.map((h, i) => {
+  const hidden = Array.from({ length: hiddenSize }, (_, i) => {
     const w_ih = 0.5 + i * 0.1;
     const w_hh = 0.3 + i * 0.05;
-    return tanh(input * w_ih + h * w_hh + 0.01 * step);
+    const prev = prevHidden[i] ?? 0;
+    return tanh(input * w_ih + prev * w_hh + 0.01 * step);
   });
   const output = sigmoid(
     hidden.reduce((sum, h, i) => sum + h * (0.4 + i * 0.1), 0) + 0.02 * step
@@ -54,7 +51,8 @@ function computeLSTMStep(
   input: number,
   prevHidden: number[],
   prevCell: number[],
-  step: number
+  step: number,
+  hiddenSize: number
 ): RNNState & { cellState: number[] } {
   const hidden: number[] = [];
   const cellState: number[] = [];
@@ -65,20 +63,22 @@ function computeLSTMStep(
     cellState: number;
   } | undefined;
 
-  for (let i = 0; i < HIDDEN_SIZE; i++) {
+  for (let i = 0; i < hiddenSize; i++) {
+    const ph = prevHidden[i] ?? 0;
+    const pc = prevCell[i] ?? 0;
     const f_gate = sigmoid(
-      input * (0.3 + i * 0.05) + prevHidden[i] * (0.2 + i * 0.03) + 0.5 + step * 0.01
+      input * (0.3 + i * 0.05) + ph * (0.2 + i * 0.03) + 0.5 + step * 0.01
     );
     const i_gate = sigmoid(
-      input * (0.4 + i * 0.04) + prevHidden[i] * (0.3 + i * 0.02) + step * 0.01
+      input * (0.4 + i * 0.04) + ph * (0.3 + i * 0.02) + step * 0.01
     );
     const o_gate = sigmoid(
-      input * (0.5 + i * 0.03) + prevHidden[i] * (0.4 + i * 0.01) + step * 0.01
+      input * (0.5 + i * 0.03) + ph * (0.4 + i * 0.01) + step * 0.01
     );
     const c_tilde = tanh(
-      input * (0.6 + i * 0.02) + prevHidden[i] * (0.5 + i * 0.01) + step * 0.01
+      input * (0.6 + i * 0.02) + ph * (0.5 + i * 0.01) + step * 0.01
     );
-    const c = f_gate * prevCell[i] + i_gate * c_tilde;
+    const c = f_gate * pc + i_gate * c_tilde;
     const h = o_gate * tanh(c);
 
     if (i === 0) {
@@ -105,55 +105,80 @@ export default function RNNPage() {
   const [running, setRunning] = useState(false);
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const [showGates, setShowGates] = useState(false);
+  const [inputText, setInputText] = useState(DEFAULT_SEQUENCE.join(', '));
+  const [hiddenSize, setHiddenSize] = useState(4);
 
-  const initialHidden = useMemo(() => Array(HIDDEN_SIZE).fill(0), []);
-  const initialCell = useMemo(() => Array(HIDDEN_SIZE).fill(0), []);
+  const inputSequence = useMemo(() => {
+    const parsed = inputText
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0)
+      .map(Number)
+      .filter((n) => !isNaN(n));
+    return parsed.length > 0 ? parsed : DEFAULT_SEQUENCE;
+  }, [inputText]);
 
-  const inputSequence = useMemo(
-    () => Array.from({ length: NUM_STEPS }, (_, i) => generateInput(i)),
-    []
-  );
+  const numSteps = inputSequence.length;
+
+  const initialHidden = useMemo(() => Array(hiddenSize).fill(0), [hiddenSize]);
+  const initialCell = useMemo(() => Array(hiddenSize).fill(0), [hiddenSize]);
 
   const rnnStates = useMemo(() => {
     const states: RNNState[] = [];
     let prevHidden = [...initialHidden];
-    for (let i = 0; i < NUM_STEPS; i++) {
-      const s = computeRNNStep(inputSequence[i], prevHidden, i);
+    for (let i = 0; i < numSteps; i++) {
+      const s = computeRNNStep(inputSequence[i], prevHidden, i, hiddenSize);
       states.push(s);
       prevHidden = [...s.hidden];
     }
     return states;
-  }, [inputSequence, initialHidden]);
+  }, [inputSequence, initialHidden, hiddenSize, numSteps]);
 
   const lstmStates = useMemo(() => {
     const states: (RNNState & { cellState: number[] })[] = [];
     let prevHidden = [...initialHidden];
     let prevCell = [...initialCell];
-    for (let i = 0; i < NUM_STEPS; i++) {
-      const s = computeLSTMStep(inputSequence[i], prevHidden, prevCell, i);
+    for (let i = 0; i < numSteps; i++) {
+      const s = computeLSTMStep(inputSequence[i], prevHidden, prevCell, i, hiddenSize);
       states.push(s);
       prevHidden = [...s.hidden];
       prevCell = [...s.cellState];
     }
     return states;
-  }, [inputSequence, initialHidden, initialCell]);
+  }, [inputSequence, initialHidden, initialCell, hiddenSize, numSteps]);
 
   const currentStates = mode === 'rnn' ? rnnStates : lstmStates;
 
   const runSequence = useCallback(async () => {
     setRunning(true);
     setActiveStep(null);
-    for (let i = 0; i < NUM_STEPS; i++) {
+    for (let i = 0; i < numSteps; i++) {
       setActiveStep(i);
       await new Promise((r) => setTimeout(r, 600));
     }
     setActiveStep(null);
     setRunning(false);
-  }, []);
+  }, [numSteps]);
 
   const paramCount = mode === 'rnn'
-    ? HIDDEN_SIZE * 2 + HIDDEN_SIZE
-    : HIDDEN_SIZE * 4 * 2 + HIDDEN_SIZE;
+    ? hiddenSize * 2 + hiddenSize
+    : hiddenSize * 4 * 2 + hiddenSize;
+
+  const handleResetDefault = useCallback(() => {
+    setInputText(DEFAULT_SEQUENCE.join(', '));
+    setHiddenSize(4);
+  }, []);
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputText(e.target.value);
+    },
+    []
+  );
+
+  const hiddenNodeHeight = Math.max(68, 56 + Math.ceil(hiddenSize / 2) * 16);
+  const outputY = Math.max(300, 200 + hiddenNodeHeight / 2 + 80);
+  const svgHeight = Math.max(480, outputY + 140);
 
   return (
     <div className="space-y-4 sm:space-y-6 max-w-7xl">
@@ -206,6 +231,43 @@ export default function RNNPage() {
         </Button>
       </div>
 
+      {/* Custom Data Panel */}
+      <GlassCard>
+        <CardContent className="p-4 sm:p-6 space-y-4">
+          <div className="grid sm:grid-cols-3 gap-4 items-end">
+            <div className="sm:col-span-2">
+              <Input
+                label="Input sequence (comma-separated)"
+                id="input-sequence"
+                placeholder="e.g. 0.1, 0.8, 0.3, 0.9, 0.2"
+                value={inputText}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="hidden-size" className="text-xs font-medium text-muted-foreground block">
+                Hidden size: {hiddenSize}
+              </label>
+              <input
+                id="hidden-size"
+                type="range"
+                min={1}
+                max={10}
+                step={1}
+                value={hiddenSize}
+                onChange={(e) => setHiddenSize(Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="secondary" size="sm" onClick={handleResetDefault}>
+              Reset Default
+            </Button>
+          </div>
+        </CardContent>
+      </GlassCard>
+
       <GlassCard>
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
@@ -213,15 +275,15 @@ export default function RNNPage() {
               {mode === 'rnn' ? 'Vanilla RNN' : 'LSTM'} &middot; Unfolded
             </Badge>
             <div className="flex gap-2">
-              <Badge variant="purple">{NUM_STEPS} steps</Badge>
-              <Badge variant="default">hidden size: {HIDDEN_SIZE}</Badge>
+              <Badge variant="purple">{numSteps} steps</Badge>
+              <Badge variant="default">hidden size: {hiddenSize}</Badge>
               <Badge variant="success">{paramCount} params</Badge>
             </div>
           </div>
 
           <div className="overflow-x-auto pb-4">
             <svg
-              viewBox="0 0 1160 540"
+              viewBox={`0 0 ${Math.max(720, numSteps * 220 + 160)} ${svgHeight}`}
               className="min-w-[720px] w-full"
               style={{ minHeight: 360 }}
             >
@@ -258,8 +320,7 @@ export default function RNNPage() {
 
                   const hiddenY = 200;
                   const inputY = 60;
-                  const outputY = 380;
-                  const gateY = 460;
+                  const gateY = outputY + 60;
 
                   return (
                     <motion.g
@@ -280,7 +341,7 @@ export default function RNNPage() {
                       </text>
 
                       {/* Hidden state → next hidden state arrow */}
-                      {step < NUM_STEPS - 1 && (
+                      {step < numSteps - 1 && (
                         <line
                           x1={cx + 38}
                           y1={hiddenY}
@@ -305,7 +366,7 @@ export default function RNNPage() {
                         x1={cx}
                         y1={inputY + 22}
                         x2={cx}
-                        y2={hiddenY - 22}
+                        y2={hiddenY - hiddenNodeHeight / 2 + 12}
                         stroke={isActive ? 'var(--neon-blue)' : 'rgba(148,163,184,0.15)'}
                         strokeWidth={isActive ? 2 : 1}
                         markerEnd={isActive ? 'url(#arrowhead-active)' : 'url(#arrowhead)'}
@@ -315,7 +376,7 @@ export default function RNNPage() {
                       {/* Hidden → Output arrow */}
                       <line
                         x1={cx}
-                        y1={hiddenY + 22}
+                        y1={hiddenY + hiddenNodeHeight / 2 - 12}
                         x2={cx}
                         y2={outputY - 22}
                         stroke={isActive ? 'var(--neon-blue)' : 'rgba(148,163,184,0.15)'}
@@ -381,9 +442,9 @@ export default function RNNPage() {
                       >
                         <motion.rect
                           x={cx - 38}
-                          y={hiddenY - 34}
+                          y={hiddenY - hiddenNodeHeight / 2}
                           width={76}
-                          height={68}
+                          height={hiddenNodeHeight}
                           rx={10}
                           fill={
                             isCurrent
@@ -403,18 +464,18 @@ export default function RNNPage() {
                         />
                         <text
                           x={cx}
-                          y={hiddenY - 14}
+                          y={hiddenY - hiddenNodeHeight / 2 + 16}
                           textAnchor="middle"
                           className="text-[10px] font-mono"
                           fill={textColor}
                         >
                           h{step}
                         </text>
-                        {state.hidden.slice(0, 4).map((h, i) => (
+                        {state.hidden.map((h, i) => (
                           <text
                             key={i}
                             x={cx - 24 + (i % 2) * 48}
-                            y={hiddenY + 4 + Math.floor(i / 2) * 16}
+                            y={hiddenY - hiddenNodeHeight / 2 + 36 + Math.floor(i / 2) * 16}
                             textAnchor="middle"
                             className="text-[9px] font-mono"
                             fill={
@@ -542,7 +603,7 @@ export default function RNNPage() {
               </AnimatePresence>
 
               {/* Legend */}
-              <g transform="translate(20, 510)">
+              <g transform={`translate(20, ${svgHeight - 40})`}>
                 <rect x={0} y={0} width={8} height={8} rx={2} fill="var(--neon-blue)" opacity={0.6} />
                 <text x={12} y={7} className="text-[8px] font-mono fill-muted-foreground">active</text>
                 <rect x={70} y={0} width={8} height={8} rx={2} fill="var(--neon-green)" opacity={0.6} />
@@ -579,11 +640,11 @@ export default function RNNPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Sequence Length</span>
-                  <span>{NUM_STEPS}</span>
+                  <span>{numSteps}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Hidden Size</span>
-                  <span>{HIDDEN_SIZE}</span>
+                  <span>{hiddenSize}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Parameters</span>
@@ -597,7 +658,7 @@ export default function RNNPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Cell State</span>
-                      <span className="text-[var(--neon-blue)]">{HIDDEN_SIZE}-d</span>
+                      <span className="text-[var(--neon-blue)]">{hiddenSize}-d</span>
                     </div>
                   </>
                 )}

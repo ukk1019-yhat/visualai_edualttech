@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { IconWave, IconFire, IconTarget } from '@/components/ui/Icons';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { motion } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Tabs } from '@/components/ui/Tabs';
 
-const words = ['The', 'cat', 'sat', 'on', 'the', 'mat'];
-
-function generateAttention(targetWord: string): number[] {
+function generateAttention(words: string[], targetWord: string): number[] {
   const idx = words.indexOf(targetWord);
   return words.map((_, i) => {
     if (i === idx) return 0.4 + Math.random() * 0.3;
@@ -18,12 +18,27 @@ function generateAttention(targetWord: string): number[] {
   });
 }
 
-const attentionMap: Record<string, number[]> = {};
-words.forEach((w) => { attentionMap[w] = generateAttention(w); });
+function generateAttentionMap(words: string[]): Record<string, number[]> {
+  const map: Record<string, number[]> = {};
+  words.forEach((w) => { map[w] = generateAttention(words, w); });
+  return map;
+}
 
 export default function AttentionPage() {
   const [hoveredWord, setHoveredWord] = useState<string | null>(null);
   const [view, setView] = useState('flow');
+  const [inputText, setInputText] = useState('The cat sat on the mat');
+  const [submittedText, setSubmittedText] = useState('The cat sat on the mat');
+  const [numHeads, setNumHeads] = useState(4);
+
+  const words = useMemo(() => submittedText.trim().split(/\s+/).filter(Boolean).slice(0, 8), [submittedText]);
+
+  const attentionMap = useMemo(() => generateAttentionMap(words), [words]);
+
+  const handleApply = useCallback(() => {
+    setSubmittedText(inputText);
+    setHoveredWord(null);
+  }, [inputText]);
 
   const activeWeights = hoveredWord ? attentionMap[hoveredWord] || [] : [];
 
@@ -37,6 +52,34 @@ export default function AttentionPage() {
           Watch how the model attends to different words. Hover a word to see attention flow.
         </p>
       </div>
+
+      <GlassCard>
+        <CardContent className="flex flex-wrap items-end gap-4">
+          <div className="flex-1 min-w-[200px]">
+            <Input
+              label="Sentence (max 8 words)"
+              placeholder="Enter a sentence..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleApply()}
+            />
+          </div>
+          <div className="w-40">
+            <label className="text-xs font-medium text-muted-foreground block mb-1.5">
+              Heads: {numHeads}
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={8}
+              value={numHeads}
+              onChange={(e) => setNumHeads(Number(e.target.value))}
+              className="w-full accent-primary"
+            />
+          </div>
+          <Button onClick={handleApply}>Apply</Button>
+        </CardContent>
+      </GlassCard>
 
       <Tabs
         tabs={[
@@ -79,7 +122,7 @@ export default function AttentionPage() {
             </p>
 
             {/* Flow lines */}
-            <svg viewBox="0 0 600 140" className="w-full h-24 sm:h-32">
+            <svg viewBox={`0 0 ${Math.max(400, words.length * 80)} 140`} className="w-full h-24 sm:h-32">
               {hoveredWord &&
                 activeWeights.map((weight, i) => {
                   if (weight < 0.03) return null;
@@ -128,7 +171,7 @@ export default function AttentionPage() {
           <GlassCard>
             <CardHeader title="Attention Heatmap" description="Row = source, Column = target" />
             <CardContent>
-              <div className="grid grid-cols-6 gap-1">
+              <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${words.length}, 1fr)` }}>
                 {words.map((row, ri) =>
                   words.map((_, ci) => {
                     const w = attentionMap[words[ri]]?.[ci] ?? 0;
@@ -202,11 +245,11 @@ export default function AttentionPage() {
             <GlassCard key={layer}>
               <CardHeader
                 title={`Layer ${layer + 1}`}
-                action={<Badge variant="purple">{12} heads</Badge>}
+                action={<Badge variant="purple">{numHeads} heads</Badge>}
               />
               <CardContent>
                 <div className="space-y-2">
-                  {Array.from({ length: 4 }).map((_, head) => (
+                  {Array.from({ length: numHeads }).map((_, head) => (
                     <div key={head} className="space-y-1">
                       <div className="flex justify-between text-xs">
                         <span className="font-mono">Head {head + 1}</span>
@@ -215,7 +258,7 @@ export default function AttentionPage() {
                         </span>
                       </div>
                       <div className="flex gap-0.5">
-                        {Array.from({ length: 6 }).map((_, j) => (
+                        {Array.from({ length: words.length }).map((_, j) => (
                           <div
                             key={j}
                             className="flex-1 h-5 rounded-sm transition-all"

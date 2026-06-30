@@ -5,9 +5,13 @@ import { motion } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { Textarea } from '@/components/ui/Input';
 
 type KernelSize = 3 | 5;
 type Stride = 1 | 2;
+type GridSize = 4 | 6 | 8;
+
+const GRID_SIZES: GridSize[] = [4, 6, 8];
 
 function genPixels(n: number): number[][] {
   return Array.from({ length: n }, () =>
@@ -15,10 +19,21 @@ function genPixels(n: number): number[][] {
   );
 }
 
-function genKernel(n: number): number[][] {
-  return Array.from({ length: n }, () =>
-    Array.from({ length: n }, () => Math.round((Math.random() * 2 - 1) * 100) / 100)
-  );
+function defaultKernel(n: number): number[][] {
+  if (n === 3) return [[-1,0,1],[-2,0,2],[-1,0,1]];
+  return [
+    [-1,-1, 0, 1, 1],
+    [-1,-2, 0, 2, 1],
+    [-2,-3, 0, 3, 2],
+    [-1,-2, 0, 2, 1],
+    [-1,-1, 0, 1, 1],
+  ];
+}
+
+function nearestGridSize(n: number): GridSize {
+  if (n <= 5) return 4;
+  if (n <= 7) return 6;
+  return 8;
 }
 
 function outSize(input: number, kernel: number, stride: number): number {
@@ -26,29 +41,28 @@ function outSize(input: number, kernel: number, stride: number): number {
 }
 
 export default function CNNPage() {
+  const [inputSize, setInputSize] = useState<GridSize>(8);
   const [kernelSize, setKernelSize] = useState<KernelSize>(3);
   const [stride, setStride] = useState<Stride>(1);
   const [status, setStatus] = useState<'idle' | 'running' | 'done'>('idle');
   const [currentPosIdx, setCurrentPosIdx] = useState(-1);
-  const [sessionId, setSessionId] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const INPUT = 8;
+  const [pixels, setPixels] = useState<number[][]>(() => genPixels(8));
+  const [kernel, setKernel] = useState<number[][]>(() => defaultKernel(3));
+  const [gridInput, setGridInput] = useState('');
 
-  const pixels = useMemo(() => genPixels(INPUT), [INPUT, sessionId]); // eslint-disable-line react-hooks/exhaustive-deps
-  const kernel = useMemo(() => genKernel(kernelSize), [kernelSize, sessionId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const outputSize = useMemo(() => outSize(INPUT, kernelSize, stride), [kernelSize, stride]);
+  const outputSize = useMemo(() => outSize(inputSize, kernelSize, stride), [inputSize, kernelSize, stride]);
 
   const positions = useMemo(() => {
     const p: { r: number; c: number }[] = [];
-    for (let r = 0; r <= INPUT - kernelSize; r += stride) {
-      for (let c = 0; c <= INPUT - kernelSize; c += stride) {
+    for (let r = 0; r <= inputSize - kernelSize; r += stride) {
+      for (let c = 0; c <= inputSize - kernelSize; c += stride) {
         p.push({ r, c });
       }
     }
     return p;
-  }, [kernelSize, stride]);
+  }, [inputSize, kernelSize, stride]);
 
   const [results, setResults] = useState<number[][]>(() =>
     Array.from({ length: outputSize }, () => Array(outputSize).fill(-1))
@@ -70,29 +84,107 @@ export default function CNNPage() {
     setResults(Array.from({ length: os }, () => Array(os).fill(-1)));
   }, []);
 
-  const handleKernelChange = useCallback((size: KernelSize) => {
-    cleanup();
-    const os = outSize(INPUT, size, stride);
-    setKernelSize(size);
-    resetResults(os);
+  const resetState = useCallback(() => {
     setCurrentPosIdx(-1);
     setStatus('idle');
     setElemWise([]);
     setConvSum(0);
-    setSessionId(id => id + 1);
-  }, [cleanup, stride, resetResults]);
+  }, []);
+
+  const handleGridSizeChange = useCallback((size: GridSize) => {
+    cleanup();
+    setInputSize(size);
+    setPixels(genPixels(size));
+    const os = outSize(size, kernelSize, stride);
+    resetResults(os);
+    resetState();
+  }, [cleanup, kernelSize, stride, resetResults, resetState]);
+
+  const handleKernelChange = useCallback((size: KernelSize) => {
+    cleanup();
+    const os = outSize(inputSize, size, stride);
+    setKernelSize(size);
+    setKernel(defaultKernel(size));
+    resetResults(os);
+    resetState();
+  }, [cleanup, inputSize, stride, resetResults, resetState]);
 
   const handleStrideChange = useCallback((s: Stride) => {
     cleanup();
-    const os = outSize(INPUT, kernelSize, s);
+    const os = outSize(inputSize, kernelSize, s);
     setStride(s);
     resetResults(os);
-    setCurrentPosIdx(-1);
-    setStatus('idle');
+    resetState();
+  }, [cleanup, inputSize, kernelSize, resetResults, resetState]);
+
+  const handleParseGrid = useCallback(() => {
+    const trimmed = gridInput.trim();
+    if (!trimmed) return;
+    try {
+      const rows = trimmed.split(';').map(r =>
+        r.split(',').map(v => {
+          const num = parseFloat(v.trim());
+          if (isNaN(num)) throw new Error('Invalid number');
+          return Math.max(0, Math.min(1, num));
+        })
+      );
+      const h = rows.length;
+      const w = rows[0].length;
+      for (const row of rows) {
+        if (row.length !== w) throw new Error('Inconsistent row lengths');
+      }
+      const size = nearestGridSize(Math.max(h, w));
+      const cropped: number[][] = [];
+      for (let r = 0; r < size; r++) {
+        const row: number[] = [];
+        for (let c = 0; c < size; c++) {
+          row.push(r < h && c < w ? rows[r][c] : 0);
+        }
+        cropped.push(row);
+      }
+      cleanup();
+      setInputSize(size);
+      setPixels(cropped);
+      const os = outSize(size, kernelSize, stride);
+      resetResults(os);
+      resetState();
+    } catch {
+      // ignore parse errors
+    }
+  }, [gridInput, cleanup, kernelSize, stride, resetResults, resetState]);
+
+  const handleGenerateRandom = useCallback(() => {
+    cleanup();
+    setPixels(genPixels(inputSize));
+    const os = outSize(inputSize, kernelSize, stride);
+    resetResults(os);
+    resetState();
+  }, [inputSize, cleanup, kernelSize, stride, resetResults, resetState]);
+
+  const togglePixel = useCallback((r: number, c: number) => {
+    if (status === 'running') return;
+    setPixels(prev => {
+      const next = prev.map(row => [...row]);
+      next[r][c] = next[r][c] === 0 ? 1 : 0;
+      return next;
+    });
     setElemWise([]);
     setConvSum(0);
-    setSessionId(id => id + 1);
-  }, [cleanup, kernelSize, resetResults]);
+    setStatus('idle');
+  }, [status]);
+
+  const handleKernelValueChange = useCallback((r: number, c: number, val: string) => {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    setKernel(prev => {
+      const next = prev.map(row => [...row]);
+      next[r][c] = num;
+      return next;
+    });
+    setElemWise([]);
+    setConvSum(0);
+    setStatus('idle');
+  }, []);
 
   const start = useCallback(() => {
     cleanup();
@@ -101,6 +193,10 @@ export default function CNNPage() {
     setResults(Array.from({ length: outputSize }, () => Array(outputSize).fill(-1)));
     setElemWise([]);
     setConvSum(0);
+
+    const maxAbs = kernel.reduce(
+      (sum, row) => sum + row.reduce((s, v) => s + Math.abs(v), 0), 0
+    );
 
     let idx = -1;
     timerRef.current = setInterval(() => {
@@ -129,8 +225,9 @@ export default function CNNPage() {
       setElemWise(ew);
       setConvSum(sum);
 
-      const maxAbs = kernelSize * kernelSize;
-      const norm = Math.max(0, Math.min(1, (sum + maxAbs) / (2 * maxAbs)));
+      const norm = maxAbs > 0
+        ? Math.max(0, Math.min(1, (sum + maxAbs) / (2 * maxAbs)))
+        : 0.5;
 
       const outR = Math.floor(idx / outputSize);
       const outC = idx % outputSize;
@@ -145,6 +242,7 @@ export default function CNNPage() {
 
   const pos = currentPosIdx >= 0 ? positions[currentPosIdx] : null;
   const totalOps = positions.length * kernelSize * kernelSize;
+  const canStart = positions.length > 0 && status !== 'running';
 
   return (
     <div className="space-y-4 sm:space-y-6 max-w-7xl">
@@ -158,6 +256,20 @@ export default function CNNPage() {
       <GlassCard>
         <CardContent className="p-4 sm:p-5">
           <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-muted-foreground">Grid:</span>
+              {GRID_SIZES.map(size => (
+                <Button
+                  key={size}
+                  size="sm"
+                  variant={inputSize === size ? 'primary' : 'secondary'}
+                  onClick={() => handleGridSizeChange(size)}
+                  disabled={status === 'running'}
+                >
+                  {size}&times;{size}
+                </Button>
+              ))}
+            </div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-medium text-muted-foreground">Kernel:</span>
               {([3, 5] as KernelSize[]).map(size => (
@@ -193,7 +305,7 @@ export default function CNNPage() {
                 Computing&hellip;
               </Button>
             ) : (
-              <Button onClick={start} size="md">
+              <Button onClick={start} size="md" disabled={!canStart}>
                 {status === 'done' ? 'Restart' : 'Start Convolution'}
               </Button>
             )}
@@ -203,17 +315,30 @@ export default function CNNPage() {
 
       <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
         <GlassCard>
-          <CardHeader title="Input Image" action={<Badge>{INPUT}&times;{INPUT}</Badge>} />
+          <CardHeader title="Input Image" action={<Badge>{inputSize}&times;{inputSize}</Badge>} />
           <CardContent>
+            <div className="mb-3 space-y-2">
+              <Textarea
+                placeholder="Paste CSV: 0.1,0.5,0.9;0.2,0.6,1.0;0.3,0.7,0.8"
+                value={gridInput}
+                onChange={e => setGridInput(e.target.value)}
+                rows={2}
+                className="text-xs"
+              />
+              <div className="flex gap-2">
+                <Button size="sm" variant="secondary" onClick={handleParseGrid}>Parse</Button>
+                <Button size="sm" variant="secondary" onClick={handleGenerateRandom}>Generate Random</Button>
+              </div>
+            </div>
             <div className="flex justify-center">
-              <div className="grid gap-0.5 bg-border/20 p-1 rounded-lg" style={{ gridTemplateColumns: `repeat(${INPUT}, 1fr)` }}>
+              <div className="grid gap-0.5 bg-border/20 p-1 rounded-lg" style={{ gridTemplateColumns: `repeat(${inputSize}, 1fr)` }}>
                 {pixels.map((row, ri) =>
                   row.map((val, ci) => {
                     const hl = pos && ri >= pos.r && ri < pos.r + kernelSize && ci >= pos.c && ci < pos.c + kernelSize;
                     return (
                       <motion.div
                         key={`${ri}-${ci}`}
-                        className="relative w-7 h-7 sm:w-9 sm:h-9 rounded"
+                        className="relative w-7 h-7 sm:w-9 sm:h-9 rounded cursor-pointer"
                         style={{
                           backgroundColor: `rgb(${val * 255 | 0},${val * 255 | 0},${val * 255 | 0})`,
                         }}
@@ -226,6 +351,7 @@ export default function CNNPage() {
                           boxShadow: 'none',
                           border: '1px solid transparent',
                         }}
+                        onClick={() => togglePixel(ri, ci)}
                       >
                         <span className="absolute inset-0 flex items-center justify-center text-[7px] font-mono font-bold text-white mix-blend-difference">
                           {val.toFixed(2)}
@@ -257,13 +383,18 @@ export default function CNNPage() {
                         className="w-7 h-7 sm:w-9 sm:h-9 rounded flex items-center justify-center"
                         style={{
                           backgroundColor: val > 0
-                            ? `rgba(0,120,255,${Math.abs(val)})`
-                            : `rgba(255,50,50,${Math.abs(val)})`,
+                            ? `rgba(0,120,255,${Math.min(Math.abs(val), 1)})`
+                            : `rgba(255,50,50,${Math.min(Math.abs(val), 1)})`,
                         }}
                       >
-                        <span className="text-[7px] font-mono font-bold text-white">
-                          {val.toFixed(2)}
-                        </span>
+                        <input
+                          type="number"
+                          value={val}
+                          onChange={e => handleKernelValueChange(ri, ci, e.target.value)}
+                          step="0.1"
+                          disabled={status === 'running'}
+                          className="w-full h-full bg-transparent text-center text-[7px] font-mono font-bold text-white outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
                       </div>
                     ))
                   )}
@@ -353,7 +484,7 @@ export default function CNNPage() {
         <CardContent className="p-4 sm:p-5">
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
             {[
-              { label: 'Input Size', value: `${INPUT}\u00d7${INPUT}`, color: 'var(--neon-blue)' },
+              { label: 'Input Size', value: `${inputSize}\u00d7${inputSize}`, color: 'var(--neon-blue)' },
               { label: 'Kernel Size', value: `${kernelSize}\u00d7${kernelSize}`, color: 'var(--neon-purple)' },
               { label: 'Stride', value: String(stride), color: 'var(--neon-green)' },
               { label: 'Output Size', value: `${outputSize}\u00d7${outputSize}`, color: 'var(--neon-blue)' },

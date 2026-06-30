@@ -1,27 +1,59 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
 const GRID_SIZE = 4;
-const NOISE_SIZE = 16;
+type TargetPattern = 'diagonal' | 'checkerboard' | 'horizontal-bars' | 'vertical-bars' | 'solid';
 
-function randomNoise(): number[] {
-  return Array.from({ length: NOISE_SIZE }, () => Math.random() * 2 - 1);
+function randomNoise(dim: number): number[] {
+  return Array.from({ length: dim }, () => Math.random() * 2 - 1);
 }
 
-function generateFakeImage(noise: number[], step: number): number[][] {
+function generateRealImage(pattern: TargetPattern): number[][] {
+  const grid: number[][] = [];
+  for (let r = 0; r < GRID_SIZE; r++) {
+    const row: number[] = [];
+    for (let c = 0; c < GRID_SIZE; c++) {
+      let val: number;
+      switch (pattern) {
+        case 'diagonal':
+          val = (r + c) / (GRID_SIZE * 2 - 2) * 2 - 1;
+          break;
+        case 'checkerboard':
+          val = (r + c) % 2 === 0 ? 1 : -1;
+          break;
+        case 'horizontal-bars':
+          val = r % 2 === 0 ? 1 : -1;
+          break;
+        case 'vertical-bars':
+          val = c % 2 === 0 ? 1 : -1;
+          break;
+        case 'solid':
+          val = 1;
+          break;
+      }
+      row.push(val);
+    }
+    grid.push(row);
+  }
+  return grid;
+}
+
+function generateFakeImage(noise: number[], step: number, pattern: TargetPattern, noiseDim: number): number[][] {
   const grid: number[][] = [];
   const maturity = Math.min(1, step / 20);
+  const realFlat = generateRealImage(pattern).flat();
   for (let r = 0; r < GRID_SIZE; r++) {
     const row: number[] = [];
     for (let c = 0; c < GRID_SIZE; c++) {
       const i = r * GRID_SIZE + c;
       const base = noise[i % noise.length] ?? 0;
-      const structured = Math.sin(r * 1.5 + step * 0.2) * Math.cos(c * 1.5 + step * 0.15);
+      const targetVal = realFlat[i] ?? 0;
+      const structured = targetVal + (Math.random() - 0.5) * 0.3 * (1 - maturity);
       const val = base * (1 - maturity) + structured * maturity + (Math.random() - 0.5) * 0.2 * (1 - maturity);
       row.push(Math.max(-1, Math.min(1, val)));
     }
@@ -52,6 +84,14 @@ function fakeImageToColor(val: number): string {
   const r = Math.round(10 + t * 200);
   const g = Math.round(10 + t * 180);
   const b = Math.round(100 + t * 155);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function realImageToColor(val: number): string {
+  const t = (val + 1) / 2;
+  const r = Math.round(200 - t * 100);
+  const g = Math.round(120 + t * 80);
+  const b = Math.round(180 - t * 100);
   return `rgb(${r}, ${g}, ${b})`;
 }
 
@@ -142,21 +182,27 @@ function ConnectionLines({ from, to, active, color }: {
 
 export default function GanPage() {
   const [step, setStep] = useState(0);
-  const [noise] = useState(randomNoise);
+  const [noiseDim, setNoiseDim] = useState(16);
+  const [targetPattern, setTargetPattern] = useState<TargetPattern>('diagonal');
+  const [speed, setSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
   const [isTraining, setIsTraining] = useState(false);
-  const [fakeGrid, setFakeGrid] = useState<number[][]>(generateFakeImage(noise, 0));
+  const [fakeGrid, setFakeGrid] = useState<number[][]>(generateFakeImage(randomNoise(16), 0, 'diagonal', 16));
   const [dScore, setDScore] = useState(0.5);
   const [gLoss, setGLoss] = useState(2.5);
   const [dLoss, setDLoss] = useState(1.2);
   const [history, setHistory] = useState<{ step: number; gLoss: number; dLoss: number }[]>([]);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const noiseRef = useRef(noise);
+  const noiseRef = useRef(randomNoise(16));
+  const stepRef = useRef(0);
+  const noiseDimRef = useRef(16);
+  const targetPatternRef = useRef<TargetPattern>('diagonal');
 
-  const trainingStep = useCallback(() => {
+  const runStep = useCallback(() => {
     noiseRef.current = noiseRef.current.map((n) => n + (Math.random() - 0.5) * 0.3);
     noiseRef.current = noiseRef.current.map((n) => Math.max(-1.5, Math.min(1.5, n)));
-    const newStep = step + 1;
-    const newGrid = generateFakeImage(noiseRef.current, newStep);
+    const newStep = stepRef.current + 1;
+    stepRef.current = newStep;
+    const newGrid = generateFakeImage(noiseRef.current, newStep, targetPatternRef.current, noiseDimRef.current);
     const score = discriminatorScore(newGrid, newStep);
     const { gLoss: g, dLoss: d } = computeLosses(newStep, score);
     setStep(newStep);
@@ -165,7 +211,7 @@ export default function GanPage() {
     setGLoss(g);
     setDLoss(d);
     setHistory((prev) => [...prev.slice(-20), { step: newStep, gLoss: g, dLoss: d }]);
-  }, [step]);
+  }, []);
 
   const handleTrain = useCallback(() => {
     if (isTraining) {
@@ -173,17 +219,75 @@ export default function GanPage() {
       setIsTraining(false);
     } else {
       setIsTraining(true);
+      const speedMap = { slow: 800, medium: 400, fast: 150 };
       intervalRef.current = setInterval(() => {
-        trainingStep();
-      }, 400);
+        runStep();
+      }, speedMap[speed]);
     }
-  }, [isTraining, trainingStep]);
+  }, [isTraining, speed, runStep]);
+
+  const handleManualStep = useCallback(() => {
+    runStep();
+  }, [runStep]);
+
+  const handleReset = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setIsTraining(false);
+    setStep(0);
+    stepRef.current = 0;
+    setDScore(0.5);
+    setGLoss(2.5);
+    setDLoss(1.2);
+    setHistory([]);
+    const newNoise = randomNoise(noiseDim);
+    noiseRef.current = newNoise;
+    setFakeGrid(generateFakeImage(newNoise, 0, targetPattern, noiseDim));
+  }, [noiseDim, targetPattern]);
+
+  const handleNoiseDimChange = useCallback((newDim: number) => {
+    setNoiseDim(newDim);
+    noiseDimRef.current = newDim;
+    const newNoise = randomNoise(newDim);
+    noiseRef.current = newNoise;
+    setStep(0);
+    stepRef.current = 0;
+    setFakeGrid(generateFakeImage(newNoise, 0, targetPattern, newDim));
+    setHistory([]);
+    setDScore(0.5);
+    setGLoss(2.5);
+    setDLoss(1.2);
+  }, [targetPattern]);
+
+  const handleTargetPatternChange = useCallback((newPattern: TargetPattern) => {
+    setTargetPattern(newPattern);
+    targetPatternRef.current = newPattern;
+    setStep(0);
+    stepRef.current = 0;
+    setFakeGrid(generateFakeImage(noiseRef.current, 0, newPattern, noiseDim));
+    setHistory([]);
+    setDScore(0.5);
+    setGLoss(2.5);
+    setDLoss(1.2);
+  }, [noiseDim]);
+
+  const handleSpeedChange = useCallback((newSpeed: 'slow' | 'medium' | 'fast') => {
+    setSpeed(newSpeed);
+    if (isTraining) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      const speedMap = { slow: 800, medium: 400, fast: 150 };
+      intervalRef.current = setInterval(() => {
+        runStep();
+      }, speedMap[newSpeed]);
+    }
+  }, [isTraining, runStep]);
 
   useEffect(() => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
+
+  const realGrid = generateRealImage(targetPattern);
 
   return (
     <div className="space-y-4 sm:space-y-6 max-w-7xl">
@@ -201,14 +305,88 @@ export default function GanPage() {
             size="md"
             onClick={handleTrain}
           >
-            {isTraining ? 'Stop Training' : 'Training Step'}
+            {isTraining ? 'Stop Training' : 'Auto Train'}
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => { setStep(0); setDScore(0.5); setGLoss(2.5); setDLoss(1.2); setHistory([]); }}>
+          <Button variant="ghost" size="sm" onClick={handleManualStep}>
+            Step
+          </Button>
+          <Button variant="ghost" size="sm" onClick={handleReset}>
             Reset
           </Button>
         </div>
       </div>
 
+      {/* Controls Panel */}
+      <GlassCard>
+        <CardHeader title="Data Controls" description="Customize the training data and parameters" />
+        <CardContent>
+          <div className="grid sm:grid-cols-4 gap-4">
+            {/* Noise Dim */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono text-muted-foreground">
+                Noise Dimension: <span className="text-[var(--neon-blue)] font-bold">{noiseDim}</span>
+              </label>
+              <input
+                type="range"
+                min={2}
+                max={20}
+                value={noiseDim}
+                onChange={(e) => handleNoiseDimChange(Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-[9px] text-muted-foreground">
+                <span>2</span>
+                <span>20</span>
+              </div>
+            </div>
+
+            {/* Speed */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono text-muted-foreground">Training Speed</label>
+              <div className="flex gap-1">
+                {(['slow', 'medium', 'fast'] as const).map((s) => (
+                  <Button
+                    key={s}
+                    variant={speed === s ? 'primary' : 'ghost'}
+                    size="sm"
+                    onClick={() => handleSpeedChange(s)}
+                  >
+                    {s}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Target Pattern */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono text-muted-foreground">Target Pattern</label>
+              <select
+                value={targetPattern}
+                onChange={(e) => handleTargetPatternChange(e.target.value as TargetPattern)}
+                className="w-full px-2 py-1.5 text-xs rounded-xl bg-sidebar-hover border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              >
+                <option value="diagonal">Diagonal</option>
+                <option value="checkerboard">Checkerboard</option>
+                <option value="horizontal-bars">Horizontal Bars</option>
+                <option value="vertical-bars">Vertical Bars</option>
+                <option value="solid">Solid</option>
+              </select>
+            </div>
+
+            {/* Real Data Preview */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono text-muted-foreground">Real Data</label>
+              <div className="grid grid-cols-4 gap-0.5 w-16 h-16 mx-auto">
+                {realGrid.flat().map((v, i) => (
+                  <div key={i} className="rounded-sm" style={{ backgroundColor: realImageToColor(v) }} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </GlassCard>
+
+      {/* Generator + Discriminator */}
       <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Generator */}
         <GlassCard className="relative overflow-hidden border-[var(--neon-blue)]/20">
@@ -301,7 +479,7 @@ export default function GanPage() {
                   <span className="text-[10px] font-mono text-muted-foreground">Fake</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'rgb(255, 120, 180)' }} />
+                  <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: realImageToColor(realGrid.flat()[0] ?? 0) }} />
                   <span className="text-[10px] font-mono text-muted-foreground">Real</span>
                 </div>
               </div>
@@ -374,7 +552,7 @@ export default function GanPage() {
         <CardContent>
           {history.length === 0 ? (
             <div className="flex items-center justify-center h-32 text-xs text-muted-foreground">
-              Press "Training Step" to begin
+              Press &ldquo;Auto Train&rdquo; or &ldquo;Step&rdquo; to begin
             </div>
           ) : (
             <div className="h-32 w-full relative">
@@ -429,8 +607,7 @@ export default function GanPage() {
         <CardContent>
           <div className="flex gap-3 overflow-x-auto pb-2">
             {history.filter((_, i) => i % 2 === 0 || i === history.length - 1).map((h) => {
-              const noiseAtStep = noiseRef.current;
-              const grid = generateFakeImage(noiseAtStep, h.step);
+              const grid = generateFakeImage(noiseRef.current, h.step, targetPatternRef.current, noiseDimRef.current);
               return (
                 <div key={h.step} className="flex flex-col items-center gap-1 shrink-0">
                   <div className="grid grid-cols-4 gap-0.5 w-16 h-16">
