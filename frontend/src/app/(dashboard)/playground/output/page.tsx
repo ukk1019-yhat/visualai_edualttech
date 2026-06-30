@@ -7,43 +7,56 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 
-const sampleOutputs = [
-  'Gravity is a fundamental force of nature that attracts objects with mass toward each other. On Earth, it gives us weight and keeps our feet on the ground.',
-  'Quantum computing leverages quantum mechanical phenomena like superposition and entanglement to process information exponentially faster than classical computers for certain problems.',
-  'Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed.',
-];
-
-const sampleProbs = [
-  { token: 'Gravity', prob: 0.95 },
-  { token: ' is', prob: 0.92 },
-  { token: ' a', prob: 0.88 },
-  { token: ' fundamental', prob: 0.76 },
-  { token: ' force', prob: 0.71 },
-  { token: ' of', prob: 0.85 },
-  { token: ' nature', prob: 0.69 },
-];
-
 export default function OutputPage() {
   const [prompt, setPrompt] = useState('What is gravity?');
-  const [streaming, setStreaming] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
   const [done, setDone] = useState(false);
+  const [stats, setStats] = useState<{ label: string; value: string }[]>([]);
+  const [error, setError] = useState('');
 
   const handleStream = async () => {
-    if (streaming) return;
-    setStreaming(true);
+    if (loading) return;
+    setLoading(true);
     setDone(false);
     setDisplayedText('');
+    setError('');
+    setStats([]);
 
-    const text = sampleOutputs[Math.floor(Math.random() * sampleOutputs.length)];
-    const chars = text.split('');
+    try {
+      const res = await fetch('/api/backend/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, model: 'nvidia/nemotron-3-ultra-550b-a55b:free' }),
+      });
 
-    for (let i = 0; i < chars.length; i++) {
-      setDisplayedText((prev) => prev + chars[i]);
-      await new Promise((r) => setTimeout(r, 15 + Math.random() * 25));
+      if (!res.ok) {
+        throw new Error(`API error: ${res.status}`);
+      }
+
+      const data = await res.json();
+      const fullText = data.content || '';
+      const chars = fullText.split('');
+
+      for (let i = 0; i < chars.length; i++) {
+        setDisplayedText((prev) => prev + chars[i]);
+        await new Promise((r) => setTimeout(r, 10 + Math.random() * 20));
+      }
+
+      setStats([
+        { label: 'Characters', value: String(fullText.length) },
+        { label: 'Est. Tokens', value: String(Math.ceil(fullText.length * 0.4)) },
+        { label: 'Prompt Tokens', value: String(data.prompt_tokens ?? '-') },
+        { label: 'Completion Tokens', value: String(data.completion_tokens ?? '-') },
+        { label: 'Latency', value: data.latency ? `${data.latency.toFixed(0)}ms` : '-' },
+        { label: 'Cost', value: data.cost ? `$${data.cost.toFixed(6)}` : '-' },
+        { label: 'Model', value: data.model?.split('/').pop() ?? '-' },
+      ]);
+    } catch (e: any) {
+      setError(e.message || 'Request failed');
     }
 
-    setStreaming(false);
+    setLoading(false);
     setDone(true);
   };
 
@@ -65,20 +78,19 @@ export default function OutputPage() {
               placeholder="Enter a prompt..."
               className="flex-1"
             />
-            <Button onClick={handleStream} loading={streaming} className="shrink-0">
-              {streaming ? 'Streaming...' : done ? 'Stream Again' : 'Start Stream'}
+            <Button onClick={handleStream} loading={loading} className="shrink-0">
+              {loading ? 'Streaming...' : done ? 'Stream Again' : 'Start Stream'}
             </Button>
           </div>
         </CardContent>
       </GlassCard>
 
       <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
-        {/* Streaming output */}
         <GlassCard>
           <CardHeader
             title="Streaming Output"
             action={
-              streaming ? (
+              loading ? (
                 <Badge variant="info">
                   <div className="w-1.5 h-1.5 rounded-full bg-current animate-pulse-glow" />
                   Live
@@ -90,7 +102,9 @@ export default function OutputPage() {
           />
           <CardContent>
             <div className="font-mono text-sm sm:text-base leading-relaxed min-h-[200px]">
-              {displayedText ? (
+              {error ? (
+                <span className="text-red-400 text-sm">{error}</span>
+              ) : displayedText ? (
                 <span>
                   {displayedText.split('').map((char, i) => (
                     <motion.span
@@ -109,7 +123,7 @@ export default function OutputPage() {
                   Click &quot;Start Stream&quot; to see token-by-token output
                 </span>
               )}
-              {streaming && (
+              {loading && (
                 <motion.span
                   animate={{ opacity: [0, 1, 0] }}
                   transition={{ duration: 0.5, repeat: Infinity }}
@@ -120,52 +134,43 @@ export default function OutputPage() {
           </CardContent>
         </GlassCard>
 
-        {/* Token probabilities */}
         <GlassCard>
           <CardHeader
-            title="Token Probabilities"
-            action={displayedText ? <Badge variant="info">{sampleProbs.length} tokens</Badge> : undefined}
+            title="Response Stats"
+            action={done ? <Badge variant="info">Live</Badge> : undefined}
           />
           <CardContent>
             <div className="space-y-2 sm:space-y-3 min-h-[200px]">
-              {sampleProbs.map((t, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{
-                    opacity: displayedText ? 1 : 0.3,
-                    x: 0,
-                  }}
-                  transition={{ delay: i * 0.08 }}
-                  className="flex items-center gap-2 sm:gap-3"
-                >
-                  <span className="w-16 sm:w-20 font-mono text-xs sm:text-sm truncate">{t.token}</span>
-                  <div className="flex-1 h-2 sm:h-2.5 rounded-full bg-muted overflow-hidden">
-                    <motion.div
-                      initial={{ width: '0%' }}
-                      animate={{ width: displayedText ? `${t.prob * 100}%` : '0%' }}
-                      transition={{ delay: i * 0.08 + 0.2, duration: 0.4 }}
-                      className="h-full rounded-full bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-green)]"
-                    />
-                  </div>
-                  <span className="w-8 sm:w-10 text-right font-mono text-xs text-muted-foreground">
-                    {(t.prob * 100).toFixed(0)}%
-                  </span>
-                </motion.div>
-              ))}
+              {stats.length > 0 ? (
+                stats.map((s, i) => (
+                  <motion.div
+                    key={s.label}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.08 }}
+                    className="flex items-center justify-between py-1 border-b border-border/30"
+                  >
+                    <span className="text-xs text-muted-foreground">{s.label}</span>
+                    <span className="text-xs font-mono font-semibold">{s.value}</span>
+                  </motion.div>
+                ))
+              ) : (
+                <span className="text-muted-foreground/50 italic text-sm">
+                  Stats appear after streaming completes
+                </span>
+              )}
             </div>
           </CardContent>
         </GlassCard>
       </div>
 
-      {/* Streaming stats */}
       {displayedText && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           {[
             { label: 'Characters', value: String(displayedText.length) },
             { label: 'Est. Tokens', value: String(Math.ceil(displayedText.length * 0.4)) },
-            { label: 'Stream Time', value: streaming ? '...' : `${(displayedText.length * 20).toFixed(0)}ms` },
-            { label: 'Avg Prob', value: `${(sampleProbs.reduce((s, t) => s + t.prob, 0) / sampleProbs.length * 100).toFixed(0)}%` },
+            { label: 'Stream Time', value: loading ? '...' : `${(displayedText.length * 15).toFixed(0)}ms` },
+            { label: 'Avg Char/ms', value: loading ? '...' : `${(displayedText.length / (displayedText.length * 0.015)).toFixed(1)}/s` },
           ].map((stat) => (
             <GlassCard key={stat.label} className="p-4 text-center">
               <p className="text-xs text-muted-foreground mb-1">{stat.label}</p>
