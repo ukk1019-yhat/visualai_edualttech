@@ -110,7 +110,11 @@ export default function ChatPage() {
     } catch (err) {
       await animateSteps([]);
       const errMsg = err instanceof Error ? err.message : 'Request failed';
-      const finalText = await streamText(`(!) Error: ${errMsg}. Make sure the backend server is running on port 8000.`);
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const hint = isLocal
+        ? 'Make sure the backend server is running on port 8000 (`uvicorn app.main:app --reload --port 8000` from backend/)'
+        : 'The backend at neuralflow-backend.vercel.app is not responding. Try again in a moment.';
+      const finalText = await streamText(`(!) Error: ${errMsg}. ${hint}`);
       setMessages((prev) => [
         ...prev,
         { id: `a-${Date.now()}`, role: 'assistant', content: finalText },
