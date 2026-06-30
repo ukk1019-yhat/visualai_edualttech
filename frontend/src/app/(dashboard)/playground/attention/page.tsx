@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { IconWave, IconFire, IconTarget } from '@/components/ui/Icons';
 import { motion } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -39,9 +40,9 @@ export default function AttentionPage() {
 
       <Tabs
         tabs={[
-          { id: 'flow', label: 'Flow View', icon: '🌊' },
-          { id: 'heatmap', label: 'Heatmap', icon: '🔥' },
-          { id: 'heads', label: 'Attention Heads', icon: '🎯' },
+          { id: 'flow', label: 'Flow View', icon: <IconWave size={14} /> },
+          { id: 'heatmap', label: 'Heatmap', icon: <IconFire size={14} /> },
+          { id: 'heads', label: 'Attention Heads', icon: <IconTarget size={14} /> },
         ]}
         activeTab={view}
         onChange={setView}

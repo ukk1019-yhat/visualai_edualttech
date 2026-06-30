@@ -1,18 +1,19 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import { IconNote, IconClipboard, IconSearch, IconCode, IconCheck, IconRocket } from '@/components/ui/Icons';
 import { motion } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
 const nodeTypes = [
-  { type: 'prompt', label: 'Prompt', icon: '📝', color: 'from-[var(--neon-blue)] to-blue-600', desc: 'User input entry point' },
-  { type: 'planner', label: 'Planner', icon: '📋', color: 'from-purple-500 to-[var(--neon-purple)]', desc: 'Break down tasks' },
-  { type: 'research', label: 'Research', icon: '🔍', color: 'from-emerald-500 to-[var(--neon-green)]', desc: 'Search & retrieve info' },
-  { type: 'coder', label: 'Coder', icon: '💻', color: 'from-orange-500 to-red-500', desc: 'Write & execute code' },
-  { type: 'reviewer', label: 'Reviewer', icon: '✅', color: 'from-yellow-500 to-amber-600', desc: 'Validate output quality' },
-  { type: 'output', label: 'Output', icon: '🚀', color: 'from-[var(--neon-green)] to-emerald-600', desc: 'Final response' },
+  { type: 'prompt', label: 'Prompt', icon: <IconNote size={16} />, color: 'from-[var(--neon-blue)] to-blue-600', desc: 'User input entry point' },
+  { type: 'planner', label: 'Planner', icon: <IconClipboard size={16} />, color: 'from-purple-500 to-[var(--neon-purple)]', desc: 'Break down tasks' },
+  { type: 'research', label: 'Research', icon: <IconSearch size={16} />, color: 'from-emerald-500 to-[var(--neon-green)]', desc: 'Search & retrieve info' },
+  { type: 'coder', label: 'Coder', icon: <IconCode size={16} />, color: 'from-orange-500 to-red-500', desc: 'Write & execute code' },
+  { type: 'reviewer', label: 'Reviewer', icon: <IconCheck size={16} />, color: 'from-yellow-500 to-amber-600', desc: 'Validate output quality' },
+  { type: 'output', label: 'Output', icon: <IconRocket size={16} />, color: 'from-[var(--neon-green)] to-emerald-600', desc: 'Final response' },
 ];
 
 interface AgentNode {

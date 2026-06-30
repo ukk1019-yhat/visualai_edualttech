@@ -1,19 +1,20 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { GlassCard, CardContent } from '@/components/ui/Card';
 import { getApiUrl } from '@/lib/api';
+import { IconTokens, IconEmbed, IconTarget, IconZap, IconBrain, IconShield, IconCheck } from '@/components/ui/Icons';
 
-const pipelineSteps = [
-  { id: 'tokenize', label: 'Tokenizing', icon: '🔤' },
-  { id: 'embed', label: 'Embedding', icon: '🌌' },
-  { id: 'attention', label: 'Attention', icon: '🎯' },
-  { id: 'layers', label: 'Transformer Layers', icon: '⚡' },
-  { id: 'reasoning', label: 'Reasoning', icon: '🧠' },
-  { id: 'safety', label: 'Safety', icon: '🛡️' },
+const pipelineSteps: { id: string; label: string; icon: ReactNode }[] = [
+  { id: 'tokenize', label: 'Tokenizing', icon: <IconTokens size={12} /> },
+  { id: 'embed', label: 'Embedding', icon: <IconEmbed size={12} /> },
+  { id: 'attention', label: 'Attention', icon: <IconTarget size={12} /> },
+  { id: 'layers', label: 'Transformer Layers', icon: <IconZap size={12} /> },
+  { id: 'reasoning', label: 'Reasoning', icon: <IconBrain size={12} /> },
+  { id: 'safety', label: 'Safety', icon: <IconShield size={12} /> },
 ];
 
 interface Message {
@@ -109,7 +110,7 @@ export default function ChatPage() {
     } catch (err) {
       await animateSteps([]);
       const errMsg = err instanceof Error ? err.message : 'Request failed';
-      const finalText = await streamText(`⚠️ Error: ${errMsg}. Make sure the backend server is running on port 8000.`);
+      const finalText = await streamText(`(!) Error: ${errMsg}. Make sure the backend server is running on port 8000.`);
       setMessages((prev) => [
         ...prev,
         { id: `a-${Date.now()}`, role: 'assistant', content: finalText },
@@ -222,7 +223,7 @@ export default function ChatPage() {
                         />
                       </div>
                     )}
-                    {isDone && <span className="text-[var(--neon-green)] shrink-0">✓</span>}
+                    {isDone && <IconCheck size={12} className="text-[var(--neon-green)] shrink-0" />}
                   </div>
                 );
               })}

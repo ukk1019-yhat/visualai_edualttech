@@ -4,12 +4,14 @@ import { motion } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ProgressBar } from '@/components/ui/Progress';
+import { IconChart, IconTokens, IconZap, IconMoney } from '@/components/ui/Icons';
+import { ReactNode } from 'react';
 
-const stats = [
-  { label: 'Total Requests', value: '12,847', change: '+23%', positive: true, icon: '📊' },
-  { label: 'Tokens Processed', value: '8.2M', change: '+18%', positive: true, icon: '🔤' },
-  { label: 'Avg Latency', value: '1.2s', change: '-5%', positive: true, icon: '⚡' },
-  { label: 'Total Cost', value: '$42.18', change: '+15%', positive: false, icon: '💰' },
+const stats: { label: string; value: string; change: string; positive: boolean; icon: ReactNode }[] = [
+  { label: 'Total Requests', value: '12,847', change: '+23%', positive: true, icon: <IconChart size={16} /> },
+  { label: 'Tokens Processed', value: '8.2M', change: '+18%', positive: true, icon: <IconTokens size={16} /> },
+  { label: 'Avg Latency', value: '1.2s', change: '-5%', positive: true, icon: <IconZap size={16} /> },
+  { label: 'Total Cost', value: '$42.18', change: '+15%', positive: false, icon: <IconMoney size={16} /> },
 ];
 
 const weeklyData = [

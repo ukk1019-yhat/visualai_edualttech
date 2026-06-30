@@ -1,19 +1,21 @@
 'use client';
 
 import { useState } from 'react';
+import { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Input';
 import { ProgressBar } from '@/components/ui/Progress';
+import { IconReceive, IconTokens, IconEmbed, IconZap, IconSparkles, IconGamepad, IconCheck } from '@/components/ui/Icons';
 
-const simulationSteps = [
-  { id: 'receive', label: 'Receiving Input', icon: '📨' },
-  { id: 'tokenize', label: 'Tokenizing Text', icon: '🔤' },
-  { id: 'embed', label: 'Generating Embeddings', icon: '🌌' },
-  { id: 'process', label: 'Processing through Layers', icon: '⚡' },
-  { id: 'generate', label: 'Generating Response', icon: '✨' },
+const simulationSteps: { id: string; label: string; icon: ReactNode }[] = [
+  { id: 'receive', label: 'Receiving Input', icon: <IconReceive size={14} /> },
+  { id: 'tokenize', label: 'Tokenizing Text', icon: <IconTokens size={14} /> },
+  { id: 'embed', label: 'Generating Embeddings', icon: <IconEmbed size={14} /> },
+  { id: 'process', label: 'Processing through Layers', icon: <IconZap size={14} /> },
+  { id: 'generate', label: 'Generating Response', icon: <IconSparkles size={14} /> },
 ];
 
 export default function SimulatorPage() {
@@ -184,7 +186,7 @@ export default function SimulatorPage() {
       {!prompt && !simulating && !result && (
         <GlassCard>
           <CardContent className="text-center py-12">
-            <p className="text-3xl mb-3">🎮</p>
+            <IconGamepad size={24} className="text-primary" />
             <p className="text-sm text-muted-foreground">
               Enter a prompt above and click Simulate to see estimated costs and latency.
             </p>

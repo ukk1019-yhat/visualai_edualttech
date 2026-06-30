@@ -1,18 +1,19 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { IconReceive, IconTokens, IconEmbed, IconTarget, IconZap, IconBrain, IconShield, IconSparkles, IconSearch, IconClock, IconWrench, IconChart, IconCheck } from '@/components/ui/Icons';
 
-const pipelineSteps = [
-  { label: 'Receiving Prompt', duration: 600, icon: '📨' },
-  { label: 'Tokenizing', duration: 400, icon: '🔤' },
-  { label: 'Embedding', duration: 500, icon: '🌌' },
-  { label: 'Attention', duration: 700, icon: '🎯' },
-  { label: 'Transformer Layers', duration: 900, icon: '⚡' },
-  { label: 'Reasoning', duration: 600, icon: '🧠' },
-  { label: 'Safety', duration: 300, icon: '🛡️' },
-  { label: 'Final Answer', duration: 400, icon: '✨' },
+const pipelineSteps: { label: string; duration: number; icon: ReactNode }[] = [
+  { label: 'Receiving Prompt', duration: 600, icon: <IconReceive size={14} /> },
+  { label: 'Tokenizing', duration: 400, icon: <IconTokens size={14} /> },
+  { label: 'Embedding', duration: 500, icon: <IconEmbed size={14} /> },
+  { label: 'Attention', duration: 700, icon: <IconTarget size={14} /> },
+  { label: 'Transformer Layers', duration: 900, icon: <IconZap size={14} /> },
+  { label: 'Reasoning', duration: 600, icon: <IconBrain size={14} /> },
+  { label: 'Safety', duration: 300, icon: <IconShield size={14} /> },
+  { label: 'Final Answer', duration: 400, icon: <IconSparkles size={14} /> },
 ];
 
 export default function LandingPage() {
@@ -189,9 +190,9 @@ export default function LandingPage() {
                         />
                       </div>
                     )}
-                    {i < currentStep && <span className="text-[var(--neon-green)] text-xs shrink-0">✓</span>}
+                    {i < currentStep && <IconCheck size={12} className="text-[var(--neon-green)] shrink-0" />}
                     {i === currentStep && currentStep >= pipelineSteps.length && (
-                      <span className="text-[var(--neon-green)] text-xs shrink-0">✓</span>
+                      <IconCheck size={12} className="text-[var(--neon-green)] shrink-0" />
                     )}
                   </motion.div>
                 ))}
@@ -202,7 +203,7 @@ export default function LandingPage() {
                   animate={{ opacity: 1 }}
                   className="text-center text-sm text-[var(--neon-green)] font-mono mt-4"
                 >
-                  ✓ Response complete
+                  <IconCheck size={12} className="inline mr-1" /> Response complete
                 </motion.p>
               )}
             </div>
@@ -228,7 +229,7 @@ export default function LandingPage() {
                   transition={{ delay: i * 0.08 }}
                   className="glass rounded-xl p-5 sm:p-6 hover:border-primary/30 transition-all"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-xl">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary">
                     {feature.icon}
                   </div>
                   <h3 className="font-semibold mb-2 text-sm sm:text-base">{feature.title}</h3>
@@ -259,10 +260,10 @@ function cn(...classes: (string | boolean | undefined)[]) {
 }
 
 const features = [
-  { title: 'Token Viewer', desc: 'See how your input gets split into tokens with probabilities and embeddings.', icon: '🔤' },
-  { title: 'Attention Maps', desc: 'Watch attention heads light up as the model connects words across your input.', icon: '🎯' },
-  { title: 'Transformer Layers', desc: 'Animate through all 32+ layers of the transformer in real-time.', icon: '⚡' },
-  { title: 'Reasoning Timeline', desc: 'Every millisecond of AI reasoning visualized like Chrome DevTools.', icon: '⏱️' },
-  { title: 'Agent Builder', desc: 'Drag-and-drop interface to build custom AI agent workflows.', icon: '🔧' },
-  { title: 'Cost Analytics', desc: 'Track tokens, latency, and cost for every request.', icon: '📊' },
+  { title: 'Token Viewer', desc: 'See how your input gets split into tokens with probabilities and embeddings.', icon: <IconTokens size={20} /> },
+  { title: 'Attention Maps', desc: 'Watch attention heads light up as the model connects words across your input.', icon: <IconTarget size={20} /> },
+  { title: 'Transformer Layers', desc: 'Animate through all 32+ layers of the transformer in real-time.', icon: <IconZap size={20} /> },
+  { title: 'Reasoning Timeline', desc: 'Every millisecond of AI reasoning visualized like Chrome DevTools.', icon: <IconClock size={20} /> },
+  { title: 'Agent Builder', desc: 'Drag-and-drop interface to build custom AI agent workflows.', icon: <IconWrench size={20} /> },
+  { title: 'Cost Analytics', desc: 'Track tokens, latency, and cost for every request.', icon: <IconChart size={20} /> },
 ];

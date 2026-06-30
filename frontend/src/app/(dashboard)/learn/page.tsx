@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, JSX } from 'react';
+import { useState, useEffect, JSX, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/Progress';
+import { IconZap, IconBalance } from '@/components/ui/Icons';
 
 type Section = {
   title: string;
@@ -849,7 +850,7 @@ type Lesson = {
   id: string;
   title: string;
   desc: string;
-  icon: string;
+  icon: ReactNode;
   duration: string;
   level: string;
   category: string;
@@ -1042,7 +1043,7 @@ const lessons: Lesson[] = [
     id: 'transformers',
     title: 'Transformer Architecture',
     desc: 'Deep dive into the transformer model that powers modern AI.',
-    icon: '⚡',
+    icon: <IconZap size={14} />,
     duration: '20 min',
     level: 'Advanced',
     category: 'deep-dives',
@@ -1456,7 +1457,7 @@ const lessons: Lesson[] = [
     id: 'how-llm-works',
     title: 'How an LLM Works',
     desc: 'Follow your prompt step-by-step through the AI pipeline.',
-    icon: '⚡',
+    icon: <IconZap size={14} />,
     duration: '15 min',
     level: 'Beginner',
     category: 'how-llm-works',
@@ -1516,7 +1517,7 @@ const lessons: Lesson[] = [
     id: 'ai-ethics',
     title: 'AI Ethics',
     desc: 'Understanding bias, hallucinations, fairness, and responsible AI development.',
-    icon: '⚖️',
+    icon: <IconBalance size={14} />,
     duration: '20 min',
     level: 'Intermediate',
     category: 'ethics',
@@ -1772,7 +1773,7 @@ export default function LearnPage() {
                 >
                   <GlassCard hover onClick={() => { setActiveLesson(l.id); setActiveSection(0); }}>
                     <CardContent>
-                      <div className="flex items-center justify-center w-8 h-8 mb-3 text-[var(--neon-blue)]">{icons[l.icon]}</div>
+                      <div className="flex items-center justify-center w-8 h-8 mb-3 text-[var(--neon-blue)]">{typeof l.icon === 'string' ? icons[l.icon] : l.icon}</div>
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold text-sm">{l.title}</h3>
                         <Badge variant={l.level === 'Beginner' ? 'success' : l.level === 'Intermediate' ? 'warning' : 'danger'} className="text-[10px]">{l.level}</Badge>
@@ -1803,7 +1804,7 @@ export default function LearnPage() {
               <Button variant="ghost" size="sm" onClick={() => { setActiveLesson(null); setMindStep(0); }}>
                 ← {activeCategory ? 'Lessons' : 'Topics'}
               </Button>
-              <span className="inline-flex items-center justify-center w-8 h-8 text-[var(--neon-blue)]">{icons[lesson.icon]}</span>
+              <span className="inline-flex items-center justify-center w-8 h-8 text-[var(--neon-blue)]">{typeof lesson.icon === 'string' ? icons[lesson.icon] : lesson.icon}</span>
               <div>
                 <h2 className="font-bold text-lg">{lesson.title}</h2>
                 <p className="text-xs text-muted-foreground">{lesson.desc}</p>

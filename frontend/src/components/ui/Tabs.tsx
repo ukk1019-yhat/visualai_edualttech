@@ -1,9 +1,10 @@
 'use client';
 
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface TabsProps {
-  tabs: { id: string; label: string; icon?: string }[];
+  tabs: { id: string; label: string; icon?: React.ReactNode }[];
   activeTab: string;
   onChange: (id: string) => void;
   className?: string;

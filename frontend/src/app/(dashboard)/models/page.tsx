@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { IconProvider, IconGem, IconBot, IconSearch, IconSnowflake } from '@/components/ui/Icons';
 import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -9,42 +10,42 @@ import { Tabs } from '@/components/ui/Tabs';
 
 const allModels = [
   {
-    id: 'nemotron-3-ultra', name: 'Nemotron 3 Ultra', provider: 'NVIDIA', icon: '🟢',
+    id: 'nemotron-3-ultra', name: 'Nemotron 3 Ultra', provider: 'NVIDIA', icon: <IconProvider size={16} className="text-green-400" />,
     latency: '0.6s', cost: 'Free', context: '128K',
     capabilities: ['Free', '550B MoE', 'Fast', 'Reasoning'],
     color: 'from-green-500 to-emerald-500',
     description: 'NVIDIA\'s most powerful Nemotron, 550B MoE model — free tier on OpenRouter.',
   },
   {
-    id: 'gemma-4-31b-it', name: 'Gemma 4 31B', provider: 'Google', icon: '💎',
+    id: 'gemma-4-31b-it', name: 'Gemma 4 31B', provider: 'Google', icon: <IconGem size={16} className="text-cyan-400" />,
     latency: '0.8s', cost: 'Free', context: '1M',
     capabilities: ['Free', '1M Context', 'Latest', 'Reasoning'],
     color: 'from-blue-400 to-cyan-400',
     description: 'Google\'s latest Gemma 4 flagship with 1M context window — free tier on OpenRouter.',
   },
   {
-    id: 'gemma-4-26b-a4b-it', name: 'Gemma 4 26B', provider: 'Google', icon: '💎',
+    id: 'gemma-4-26b-a4b-it', name: 'Gemma 4 26B', provider: 'Google', icon: <IconGem size={16} className="text-cyan-400" />,
     latency: '0.6s', cost: 'Free', context: '1M',
     capabilities: ['Free', 'MoE', '1M Context', 'Efficient'],
     color: 'from-blue-500 to-cyan-500',
     description: 'Google\'s MoE Gemma 4 model — fast, efficient, free on OpenRouter.',
   },
   {
-    id: 'gemma-3-12b-it', name: 'Gemma 3 12B', provider: 'Google', icon: '💎',
+    id: 'gemma-3-12b-it', name: 'Gemma 3 12B', provider: 'Google', icon: <IconGem size={16} className="text-cyan-400" />,
     latency: '0.5s', cost: 'Free', context: '128K',
     capabilities: ['Free', 'Fast', 'Open Source', 'Balanced'],
     color: 'from-blue-600 to-cyan-600',
     description: 'Google\'s well-rounded open model with strong quality.',
   },
   {
-    id: 'llama-3.1-70b', name: 'Llama 3.1 70B', provider: 'Meta', icon: '🦙',
+    id: 'llama-3.1-70b', name: 'Llama 3.1 70B', provider: 'Meta', icon: <IconBot size={16} className="text-orange-400" />,
     latency: '1.5s', cost: 'Free (Open Source)', context: '128K',
     capabilities: ['Open Source', 'Code', 'Reasoning', 'On-premise'],
     color: 'from-purple-400 to-purple-600',
     description: 'Meta\'s open-source large language model, deployable on-premise.',
   },
   {
-    id: 'mistral-large', name: 'Mistral Large', provider: 'Mistral', icon: '🌬️',
+    id: 'mistral-large', name: 'Mistral Large', provider: 'Mistral', icon: <IconSnowflake size={16} className="text-blue-400" />,
     latency: '1.1s', cost: '$8 / 1M tokens', context: '128K',
     capabilities: ['Multilingual', 'Code', 'Reasoning', 'Open Source'],
     color: 'from-cyan-400 to-cyan-600',
@@ -71,10 +72,10 @@ export default function ModelsPage() {
         <Tabs
           tabs={[
             { id: 'all', label: 'All' },
-            { id: 'google', label: 'Google', icon: '💎' },
-            { id: 'nvidia', label: 'NVIDIA', icon: '🟢' },
-            { id: 'meta', label: 'Meta', icon: '🦙' },
-            { id: 'mistral', label: 'Mistral', icon: '🌬️' },
+            { id: 'google', label: 'Google', icon: <IconGem size={16} className="text-cyan-400" /> },
+            { id: 'nvidia', label: 'NVIDIA', icon: <IconProvider size={16} className="text-green-400" /> },
+            { id: 'meta', label: 'Meta', icon: <IconBot size={16} className="text-orange-400" /> },
+            { id: 'mistral', label: 'Mistral', icon: <IconSnowflake size={16} className="text-blue-400" /> },
           ]}
           activeTab={filter}
           onChange={setFilter}
