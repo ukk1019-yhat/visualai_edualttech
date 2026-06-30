@@ -34,7 +34,7 @@ function NeuralNetSVG({ hover }: { hover: boolean }) {
                     <line
                       key={`w${l}-${n}-${m}`}
                       x1={x} y1={y} x2={x2} y2={y2}
-                      stroke={hover ? '#60a5fa' : '#334155'}
+                      stroke={hover ? '#60a5fa' : '#E5E7EB'}
                       strokeWidth={0.5}
                       className="transition-colors duration-500"
                     />
@@ -42,8 +42,8 @@ function NeuralNetSVG({ hover }: { hover: boolean }) {
                 })}
               <circle
                 cx={x} cy={y} r={5}
-                fill={hover ? (l === 0 ? '#60a5fa' : l === 1 ? '#a78bfa' : '#34d399') : '#1e293b'}
-                stroke={hover ? (l === 0 ? '#60a5fa' : l === 1 ? '#a78bfa' : '#34d399') : '#334155'}
+                fill={hover ? (l === 0 ? '#60a5fa' : l === 1 ? '#a78bfa' : '#34d399') : '#FFFFFF'}
+                stroke={hover ? (l === 0 ? '#60a5fa' : l === 1 ? '#a78bfa' : '#34d399') : '#E5E7EB'}
                 strokeWidth={1}
                 className="transition-all duration-500"
               />
@@ -64,8 +64,8 @@ function CNNSVG({ hover }: { hover: boolean }) {
             key={`in-${r}-${c}`}
             x={15 + c * 8} y={10 + r * 8}
             width={7} height={7}
-            fill={hover ? `rgba(52,211,153,${0.2 + ((r + c) % 3) * 0.2})` : '#1e293b'}
-            stroke={hover ? '#34d399' : '#334155'}
+              fill={hover ? `rgba(52,211,153,${0.2 + ((r + c) % 3) * 0.2})` : '#FFFFFF'}
+              stroke={hover ? '#34d399' : '#E5E7EB'}
             strokeWidth={0.5}
             className="transition-all duration-500"
           />
@@ -85,15 +85,15 @@ function CNNSVG({ hover }: { hover: boolean }) {
             key={`out-${r}-${c}`}
             x={150 + c * 14} y={25 + r * 14}
             width={12} height={12}
-            fill={hover ? 'rgba(96,165,250,0.3)' : '#1e293b'}
-            stroke={hover ? '#60a5fa' : '#334155'}
+              fill={hover ? 'rgba(96,165,250,0.3)' : '#FFFFFF'}
+              stroke={hover ? '#60a5fa' : '#E5E7EB'}
             strokeWidth={0.5}
             className="transition-all duration-500"
           />
         ))
       )}
-      <line x1={65} y1={50} x2={145} y2={50} stroke={hover ? '#34d399' : '#334155'} strokeWidth={1} strokeDasharray="3 2" className="transition-colors duration-500" />
-      <text x={105} y={45} fontSize={5} fill={hover ? '#34d399' : '#475569'} textAnchor="middle" className="transition-colors duration-500">→ feat map</text>
+      <line x1={65} y1={50} x2={145} y2={50} stroke={hover ? '#34d399' : '#E5E7EB'} strokeWidth={1} strokeDasharray="3 2" className="transition-colors duration-500" />
+      <text x={105} y={45} fontSize={5}               fill={hover ? '#34d399' : '#CBD5E1'} textAnchor="middle" className="transition-colors duration-500">→ feat map</text>
     </svg>
   );
 }
@@ -105,14 +105,14 @@ function RNNSVG({ hover }: { hover: boolean }) {
         const x = 25 + t * 42;
         return (
           <g key={`step-${t}`}>
-            <rect x={x - 8} y={8} width={16} height={12} rx={2} fill={hover ? '#f97316' : '#1e293b'} stroke={hover ? '#f97316' : '#334155'} strokeWidth={0.8} className="transition-all duration-500" />
-            <text x={x} y={17} fontSize={5} fill={hover ? '#fff' : '#475569'} textAnchor="middle">{hover ? 'x' : ''}</text>
-            <circle cx={x} cy={45} r={7} fill={hover ? '#60a5fa' : '#1e293b'} stroke={hover ? '#60a5fa' : '#334155'} strokeWidth={1} className="transition-all duration-500" />
+            <rect x={x - 8} y={8} width={16} height={12} rx={2} fill={hover ? '#f97316' : '#FFFFFF'} stroke={hover ? '#f97316' : '#E5E7EB'} strokeWidth={0.8} className="transition-all duration-500" />
+            <text x={x} y={17} fontSize={5} fill={hover ? '#fff' : '#CBD5E1'} textAnchor="middle">{hover ? 'x' : ''}</text>
+            <circle cx={x} cy={45} r={7} fill={hover ? '#60a5fa' : '#FFFFFF'} stroke={hover ? '#60a5fa' : '#E5E7EB'} strokeWidth={1} className="transition-all duration-500" />
             <text x={x} y={47} fontSize={4} fill={hover ? '#fff' : 'transparent'} textAnchor="middle">h</text>
             {t < 3 && (
               <motion.path
                 d={`M${x + 7} 45 Q${x + 18} ${hover ? 30 : 45} ${x + 35} 45`}
-                fill="none" stroke={hover ? '#34d399' : '#334155'}
+                fill="none" stroke={hover ? '#34d399' : '#E5E7EB'}
                 strokeWidth={1}
                 className="transition-colors duration-500"
                 animate={hover ? { pathLength: [0, 1] } : undefined}
@@ -129,33 +129,33 @@ function RNNSVG({ hover }: { hover: boolean }) {
 function GANSVG({ hover }: { hover: boolean }) {
   return (
     <svg viewBox="0 0 200 100" className="w-full h-full">
-      <text x={40} y={12} fontSize={6} fill={hover ? '#60a5fa' : '#475569'} textAnchor="middle" className="transition-colors duration-500">Generator</text>
-      <rect x={15} y={18} width={18} height={8} rx={1.5} fill="rgba(96,165,250,0.2)" stroke={hover ? '#60a5fa' : '#334155'} strokeWidth={0.8} className="transition-colors duration-500" />
-      <circle cx={24} cy={26} r={2} fill={hover ? '#60a5fa' : '#1e293b'} className="transition-colors duration-500" />
-      <rect x={15} y={30} width={18} height={8} rx={1.5} fill="rgba(96,165,250,0.2)" stroke={hover ? '#60a5fa' : '#334155'} strokeWidth={0.8} className="transition-colors duration-500" />
-      <rect x={15} y={42} width={18} height={8} rx={1.5} fill="rgba(96,165,250,0.2)" stroke={hover ? '#60a5fa' : '#334155'} strokeWidth={0.8} className="transition-colors duration-500" />
+              <text x={40} y={12} fontSize={6} fill={hover ? '#60a5fa' : '#CBD5E1'} textAnchor="middle" className="transition-colors duration-500">Generator</text>
+      <rect x={15} y={18} width={18} height={8} rx={1.5}               fill="rgba(96,165,250,0.2)" stroke={hover ? '#60a5fa' : '#E5E7EB'} strokeWidth={0.8} className="transition-colors duration-500" />
+      <circle cx={24} cy={26} r={2} fill={hover ? '#60a5fa' : '#FFFFFF'} className="transition-colors duration-500" />
+      <rect x={15} y={30} width={18} height={8} rx={1.5}               fill="rgba(96,165,250,0.2)" stroke={hover ? '#60a5fa' : '#E5E7EB'} strokeWidth={0.8} className="transition-colors duration-500" />
+      <rect x={15} y={42} width={18} height={8} rx={1.5}               fill="rgba(96,165,250,0.2)" stroke={hover ? '#60a5fa' : '#E5E7EB'} strokeWidth={0.8} className="transition-colors duration-500" />
       <motion.rect
         x={15} y={54} width={18} height={18} rx={2}
-        fill="rgba(96,165,250,0.3)" stroke={hover ? '#60a5fa' : '#334155'} strokeWidth={0.8}
+        fill="rgba(96,165,250,0.3)" stroke={hover ? '#60a5fa' : '#E5E7EB'} strokeWidth={0.8}
         className="transition-colors duration-500"
         animate={hover ? { scale: [1, 1.08, 1] } : undefined}
         transition={{ duration: 0.5, repeat: Infinity }}
       />
-      <text x={160} y={12} fontSize={6} fill={hover ? '#a78bfa' : '#475569'} textAnchor="middle" className="transition-colors duration-500">Discriminator</text>
-      <rect x={130} y={18} width={14} height={8} rx={1.5} fill="rgba(167,139,250,0.2)" stroke={hover ? '#a78bfa' : '#334155'} strokeWidth={0.8} className="transition-colors duration-500" />
-      <rect x={130} y={30} width={14} height={8} rx={1.5} fill="rgba(167,139,250,0.2)" stroke={hover ? '#a78bfa' : '#334155'} strokeWidth={0.8} className="transition-colors duration-500" />
-      <rect x={130} y={42} width={14} height={8} rx={1.5} fill="rgba(167,139,250,0.2)" stroke={hover ? '#a78bfa' : '#334155'} strokeWidth={0.8} className="transition-colors duration-500" />
-      <circle cx={137} cy={58} r={6} fill="rgba(167,139,250,0.3)" stroke={hover ? '#a78bfa' : '#334155'} strokeWidth={1} className="transition-colors duration-500" />
+              <text x={160} y={12} fontSize={6} fill={hover ? '#a78bfa' : '#CBD5E1'} textAnchor="middle" className="transition-colors duration-500">Discriminator</text>
+      <rect x={130} y={18} width={14} height={8} rx={1.5}               fill="rgba(167,139,250,0.2)" stroke={hover ? '#a78bfa' : '#E5E7EB'} strokeWidth={0.8} className="transition-colors duration-500" />
+      <rect x={130} y={30} width={14} height={8} rx={1.5}               fill="rgba(167,139,250,0.2)" stroke={hover ? '#a78bfa' : '#E5E7EB'} strokeWidth={0.8} className="transition-colors duration-500" />
+      <rect x={130} y={42} width={14} height={8} rx={1.5}               fill="rgba(167,139,250,0.2)" stroke={hover ? '#a78bfa' : '#E5E7EB'} strokeWidth={0.8} className="transition-colors duration-500" />
+      <circle cx={137} cy={58} r={6}               fill="rgba(167,139,250,0.3)" stroke={hover ? '#a78bfa' : '#E5E7EB'} strokeWidth={1} className="transition-colors duration-500" />
       <motion.path
         d="M34 40 Q78 20 128 40"
-        fill="none" stroke={hover ? '#f87171' : '#334155'} strokeWidth={1}
+        fill="none" stroke={hover ? '#f87171' : '#E5E7EB'} strokeWidth={1}
         strokeDasharray="3 2"
         animate={hover ? { strokeDashoffset: [0, -20] } : undefined}
         transition={{ duration: 1, repeat: Infinity }}
       />
       <motion.path
         d="M128 50 Q78 75 34 50"
-        fill="none" stroke={hover ? '#34d399' : '#334155'} strokeWidth={1}
+        fill="none" stroke={hover ? '#34d399' : '#E5E7EB'} strokeWidth={1}
         strokeDasharray="3 2"
         animate={hover ? { strokeDashoffset: [0, -20] } : undefined}
         transition={{ duration: 1, repeat: Infinity }}
@@ -176,15 +176,15 @@ function DiffusionSVG({ hover }: { hover: boolean }) {
           const alpha = hover ? 1 - i * 0.18 : 0.3;
           const fill = hover
             ? `rgba(6,182,212,${alpha})`
-            : '#1e293b';
+            : '#FFFFFF';
           return (
             <g key={`step-${i}`}>
-              <rect x={x} y={20} width={28} height={28} rx={3} fill={fill} stroke={hover ? '#06b6d4' : '#334155'} strokeWidth={0.5} className="transition-all duration-500" />
+              <rect x={x} y={20} width={28} height={28} rx={3} fill={fill} stroke={hover ? '#06b6d4' : '#E5E7EB'} strokeWidth={0.5} className="transition-all duration-500" />
               {i < cols - 1 && (
                 <motion.path
                   d={`M${x + 28} 34 Q${x + 33} 34 ${x + 36} 34`}
                   fill="none"
-                  stroke={hover ? '#34d399' : '#334155'}
+                  stroke={hover ? '#34d399' : '#E5E7EB'}
                   strokeWidth={0.8}
                   animate={hover ? { pathLength: [0, 1], opacity: [0, 1] } : undefined}
                   transition={{ delay: i * 0.1, duration: 0.3 }}
@@ -211,7 +211,7 @@ function TransformerSVG({ hover }: { hover: boolean }) {
     <svg viewBox="0 0 200 100" className="w-full h-full">
       {/* Input tokens */}
       {Array.from({ length: tokens }).map((_, t) => (
-        <rect key={`tok-${t}`} x={8} y={10 + t * 14} width={6} height={10} rx={1} fill={hover ? 'rgba(96,165,250,0.3)' : '#1e293b'} stroke={hover ? '#60a5fa' : '#334155'} strokeWidth={0.5} className="transition-all duration-500" />
+        <rect key={`tok-${t}`} x={8} y={10 + t * 14} width={6} height={10} rx={1}               fill={hover ? 'rgba(96,165,250,0.3)' : '#FFFFFF'} stroke={hover ? '#60a5fa' : '#E5E7EB'} strokeWidth={0.5} className="transition-all duration-500" />
       ))}
       {/* Attention lines */}
       {Array.from(Array(heads).keys()).map((h) =>
@@ -224,7 +224,7 @@ function TransformerSVG({ hover }: { hover: boolean }) {
               key={`attn-${h}-${s}`}
               d={`M18 ${sy} Q${28 + h * 15} ${(sy + ty) / 2} ${170} ${ty}`}
               fill="none"
-              stroke={hover ? colors[h] : '#1e293b'}
+              stroke={hover ? colors[h] : '#E5E7EB'}
               strokeWidth={hover ? 0.6 + h * 0.2 : 0.3}
               strokeOpacity={hover ? 0.3 + s * 0.15 : 0}
               animate={hover ? { strokeOpacity: [0.2, 0.6, 0.2] } : undefined}
@@ -235,9 +235,9 @@ function TransformerSVG({ hover }: { hover: boolean }) {
       )}
       {/* Output tokens */}
       {Array.from({ length: tokens }).map((_, t) => (
-        <rect key={`out-${t}`} x={180} y={10 + t * 14} width={6} height={10} rx={1} fill={hover ? 'rgba(52,211,153,0.3)' : '#1e293b'} stroke={hover ? '#34d399' : '#334155'} strokeWidth={0.5} className="transition-all duration-500" />
+        <rect key={`out-${t}`} x={180} y={10 + t * 14} width={6} height={10} rx={1}               fill={hover ? 'rgba(52,211,153,0.3)' : '#FFFFFF'} stroke={hover ? '#34d399' : '#E5E7EB'} strokeWidth={0.5} className="transition-all duration-500" />
       ))}
-      <text x={97} y={95} fontSize={5} fill={hover ? '#60a5fa' : '#1e293b'} textAnchor="middle" className="transition-colors duration-500">multi-head attention</text>
+              <text x={97} y={95} fontSize={5} fill={hover ? '#60a5fa' : '#CBD5E1'} textAnchor="middle" className="transition-colors duration-500">multi-head attention</text>
     </svg>
   );
 }
@@ -378,7 +378,7 @@ export default function VisualizationsPage() {
                 <GlassCard hover className="h-full group">
                   <div className="p-4 sm:p-5 flex flex-col h-full">
                     {/* SVG preview */}
-                    <div className="h-24 sm:h-28 mb-3 rounded-lg bg-black/40 overflow-hidden">
+                    <div className="h-24 sm:h-28 mb-3 rounded-lg bg-[#F1F5F9] border border-[#E5E7EB] overflow-hidden">
                       <div className="w-full h-full p-1.5">
                         {arch.svg(isHovered)}
                       </div>

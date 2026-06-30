@@ -253,7 +253,7 @@ export default function DiffusionPage() {
                   <motion.div
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1, repeat: Infinity }}
-                    className="text-2xl text-[var(--neon-green)]"
+                    className="text-2xl text-[#16A34A]"
                   >
                     &rarr;
                   </motion.div>

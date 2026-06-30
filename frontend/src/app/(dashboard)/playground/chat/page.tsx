@@ -166,7 +166,7 @@ export default function ChatPage() {
                   <motion.span
                     animate={{ opacity: [0, 1, 0] }}
                     transition={{ duration: 0.5, repeat: Infinity }}
-                    className="inline-block w-0.5 h-4 bg-[var(--neon-blue)] ml-0.5 align-middle"
+                    className="inline-block w-0.5 h-4 bg-[#082C4E] ml-0.5 align-middle"
                   />
                 </p>
               </div>
@@ -221,13 +221,13 @@ export default function ChatPage() {
                     {isActive && (
                       <div className="w-12 sm:w-16 h-1 rounded-full bg-muted overflow-hidden">
                         <motion.div
-                          className="h-full rounded-full bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)]"
+                          className="h-full rounded-full bg-gradient-to-r from-[#082C4E] to-[#8B5CF6]"
                           animate={{ width: ['0%', '100%'] }}
                           transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                         />
                       </div>
                     )}
-                    {isDone && <IconCheck size={12} className="text-[var(--neon-green)] shrink-0" />}
+                    {isDone && <IconCheck size={12} className="text-[#16A34A] shrink-0" />}
                   </div>
                 );
               })}
@@ -235,7 +235,7 @@ export default function ChatPage() {
 
             <div className="mt-4 pt-4 border-t border-border">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <div className="w-2 h-2 rounded-full bg-[var(--neon-green)]" />
+                <div className="w-2 h-2 rounded-full bg-[#16A34A]" />
                 OpenRouter connected
               </div>
             </div>

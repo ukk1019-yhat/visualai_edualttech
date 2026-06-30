@@ -5,119 +5,30 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { IconMessage, IconTokens, IconEmbed, IconTarget, IconClock, IconDocument, IconBot, IconChart, IconWrench, IconGamepad, IconBook, IconPlug, IconTrending } from '@/components/ui/Icons';
 import { useTheme } from '@/components/ThemeProvider';
+import {
+  IconChart, IconZap, IconTarget, IconBook, IconWrench,
+  IconBot, IconGamepad, IconPlug, IconTrending, IconMessage,
+} from '@/components/ui/Icons';
 
-const navGroups: { section: string; items: { label: string; href: string; icon: ReactNode }[] }[] = [
-  {
-    section: 'AI Playground',
-    items: [
-      { label: 'Chat', href: '/playground/chat', icon: <IconMessage size={18} /> },
-      { label: 'Token Viewer', href: '/playground/token-viewer', icon: <IconTokens size={18} /> },
-      { label: 'Embeddings', href: '/playground/embeddings', icon: <IconEmbed size={18} /> },
-      { label: 'Attention', href: '/playground/attention', icon: <IconTarget size={18} /> },
-      { label: 'Reasoning', href: '/playground/reasoning', icon: <IconClock size={18} /> },
-      { label: 'Output', href: '/playground/output', icon: <IconDocument size={18} /> },
-    ],
-  },
-  {
-    section: 'AI Models',
-    items: [
-      { label: 'Models', href: '/models', icon: <IconBot size={18} /> },
-    ],
-  },
-  {
-    section: 'Tools',
-    items: [
-      { label: 'Visualizations', href: '/visualizations', icon: <IconChart size={18} /> },
-      { label: 'Agent Builder', href: '/agent-builder', icon: <IconWrench size={18} /> },
-      { label: 'AI Simulator', href: '/simulator', icon: <IconGamepad size={18} /> },
-      { label: 'Learn AI', href: '/learn', icon: <IconBook size={18} /> },
-      { label: 'API', href: '/api-page', icon: <IconPlug size={18} /> },
-      { label: 'Dashboard', href: '/dashboard-page', icon: <IconTrending size={18} /> },
-    ],
-  },
-];
-
-const models = [
-  { value: 'nemotron-3-ultra', label: 'Nemotron 3 Ultra' },
-  { value: 'gemma-4-31b-it', label: 'Gemma 4 31B' },
-  { value: 'gemma-4-26b-a4b-it', label: 'Gemma 4 26B' },
-  { value: 'gemma-3-12b-it', label: 'Gemma 3 12B' },
-  { value: 'llama-3.1-70b', label: 'Llama 3.1 70B' },
+const navItems: { label: string; href: string; icon: ReactNode }[] = [
+  { label: 'Home', href: '/dashboard-page', icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg> },
+  { label: 'Learn AI', href: '/learn', icon: <IconBook size={20} /> },
+  { label: 'AI Playground', href: '/playground/chat', icon: <IconZap size={20} /> },
+  { label: 'Visualizations', href: '/visualizations', icon: <IconChart size={20} /> },
+  { label: 'Agent Builder', href: '/agent-builder', icon: <IconWrench size={20} /> },
+  { label: 'Models', href: '/models', icon: <IconBot size={20} /> },
+  { label: 'API', href: '/api-page', icon: <IconPlug size={20} /> },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
-  useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth < 1024) setCollapsed(true);
-    };
-    onResize();
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  const sidebarContent = (
-    <nav className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-4 h-16 shrink-0 border-b border-border">
-        <div className="w-3 h-3 rounded-full bg-[var(--neon-blue)] shadow-[0_0_8px_var(--neon-blue)] shrink-0" />
-        {!collapsed && <span className="font-bold text-lg tracking-tight">EAT Neural Flow</span>}
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-3 space-y-6 scrollbar-thin">
-        {navGroups.map((group) => (
-          <div key={group.section}>
-            {!collapsed && (
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 mb-2">
-                {group.section}
-              </p>
-            )}
-            <div className="space-y-0.5">
-              {group.items.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className={cn(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all',
-                      isActive
-                        ? 'bg-primary/10 text-primary font-medium'
-                        : 'text-sidebar-foreground hover:bg-sidebar-hover hover:text-foreground'
-                    )}
-                    title={collapsed ? item.label : undefined}
-                  >
-                    <span className="shrink-0 text-foreground">{item.icon}</span>
-                    <AnimatePresence>
-                      {!collapsed && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -8 }}
-                          className="truncate"
-                        >
-                          {item.label}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-    </nav>
-  );
-
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-[#F8FAFC] flex">
       {/* Mobile overlay */}
       <AnimatePresence>
         {mobileOpen && (
@@ -125,20 +36,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            className="fixed inset-0 z-40 bg-black/20 lg:hidden"
             onClick={() => setMobileOpen(false)}
           />
         )}
       </AnimatePresence>
 
-      {/* Desktop sidebar */}
-      <aside
-        className={cn(
-          'hidden lg:flex fixed left-0 top-0 bottom-0 z-30 glass border-r border-border flex-col transition-all duration-300',
-          collapsed ? 'w-16' : 'w-64'
-        )}
-      >
-        {sidebarContent}
+      {/* Sidebar */}
+      <aside className="hidden lg:flex fixed left-0 top-0 bottom-0 z-30 w-64 bg-white border-r border-[#E5E7EB] flex-col">
+        <SidebarContent pathname={pathname} />
       </aside>
 
       {/* Mobile sidebar */}
@@ -149,55 +55,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed left-0 top-0 bottom-0 z-50 w-64 glass border-r border-border flex flex-col lg:hidden"
+            className="fixed left-0 top-0 bottom-0 z-50 w-64 bg-white border-r border-[#E5E7EB] flex-col lg:hidden"
           >
-            {sidebarContent}
+            <SidebarContent pathname={pathname} mobile onClose={() => setMobileOpen(false)} />
           </motion.aside>
         )}
       </AnimatePresence>
 
-      {/* Main content */}
-      <main className={cn('flex-1 flex flex-col transition-all duration-300', 'lg:ml-64', collapsed && 'lg:ml-16')}>
-        {/* Top bar */}
-        <header className="h-16 glass border-b border-border flex items-center justify-between gap-4 px-4 lg:px-6 sticky top-0 z-20">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 rounded-lg hover:bg-sidebar-hover text-muted-foreground"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-            <button
-              onClick={() => setCollapsed(!collapsed)}
-              className="hidden lg:flex p-1.5 rounded-lg hover:bg-sidebar-hover text-muted-foreground transition-colors"
-            >
-              <svg className={cn('w-4 h-4 transition-transform', collapsed && 'rotate-180')} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-              </svg>
-            </button>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <div className="w-2 h-2 rounded-full bg-[var(--neon-green)] animate-pulse-glow" />
-              <span className="hidden sm:inline">All systems operational</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <select
-              className="bg-muted border border-border rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary max-w-[140px] sm:max-w-none"
-              defaultValue="nemotron-3-ultra"
-            >
-              {models.map((m) => (
-                <option key={m.value} value={m.value}>{m.label}</option>
-              ))}
-            </select>
-          </div>
-        </header>
+      {/* Main */}
+      <main className="flex-1 flex flex-col lg:ml-64 min-h-screen">
+        {/* Topbar */}
+        <TopBar onMenuClick={() => setMobileOpen(true)} />
 
         {/* Page content */}
-        <div className="flex-1 p-4 lg:p-6 overflow-y-auto">
+        <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
@@ -215,31 +86,127 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   );
 }
 
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
+function SidebarContent({ pathname, mobile, onClose }: { pathname: string; mobile?: boolean; onClose?: () => void }) {
   return (
-    <button
-      onClick={toggle}
-      className="p-2 rounded-lg hover:bg-sidebar-hover text-muted-foreground transition-colors"
-      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-    >
-      {theme === 'dark' ? (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <circle cx="12" cy="12" r="5" />
-          <line x1="12" y1="1" x2="12" y2="3" />
-          <line x1="12" y1="21" x2="12" y2="23" />
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-          <line x1="1" y1="12" x2="3" y2="12" />
-          <line x1="21" y1="12" x2="23" y2="12" />
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-        </svg>
-      ) : (
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-      )}
-    </button>
+    <nav className="flex flex-col h-full">
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-6 h-16 shrink-0 border-b border-[#E5E7EB]">
+        <Link href="/">
+          <img src="/logo.svg" alt="EduAltTech" className="h-7" />
+        </Link>
+      </div>
+
+      {/* Nav items */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-1">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              onClick={mobile ? onClose : undefined}
+              className={cn(
+                'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative group',
+                isActive
+                  ? 'bg-[#082C4E] text-white shadow-sm'
+                  : 'text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F5F9]'
+              )}
+            >
+              <span className={cn('shrink-0', isActive ? 'text-white' : 'text-[#64748B] group-hover:text-[#082C4E]')}>
+                {item.icon}
+              </span>
+              <span>{item.label}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="active-indicator"
+                  className="absolute right-2 w-1.5 h-1.5 rounded-full bg-[#16A34A]"
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                />
+              )}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Bottom */}
+      <div className="p-4 border-t border-[#E5E7EB]">
+        <Link
+          href="/pricing"
+          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-all"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Pricing
+        </Link>
+      </div>
+    </nav>
+  );
+}
+
+function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
+  const { theme, toggle } = useTheme();
+
+  return (
+    <header className="h-16 bg-white/80 backdrop-blur-md border-b border-[#E5E7EB] flex items-center justify-between gap-4 px-4 lg:px-8 sticky top-0 z-20">
+      <div className="flex items-center gap-4 flex-1">
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden p-2 rounded-lg hover:bg-[#F1F5F9] text-[#64748B]"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        {/* Search */}
+        <div className="relative flex-1 max-w-md">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search AI concepts..."
+            className="w-full bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl pl-10 pr-4 py-2 text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#082C4E]/30 focus:ring-1 focus:ring-[#082C4E]/20 transition-all"
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        {/* Theme toggle */}
+        <button
+          onClick={toggle}
+          className="p-2 rounded-lg hover:bg-[#F1F5F9] text-[#64748B] transition-colors"
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+        >
+          {theme === 'dark' ? (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          )}
+        </button>
+
+        {/* Notifications */}
+        <button className="p-2 rounded-lg hover:bg-[#F1F5F9] text-[#64748B] transition-colors relative">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#16A34A]" />
+        </button>
+
+        {/* User */}
+        <div className="flex items-center gap-2 pl-2 border-l border-[#E5E7EB]">
+          <div className="w-8 h-8 rounded-full bg-[#082C4E] flex items-center justify-center text-white text-xs font-semibold">U</div>
+          <div className="hidden sm:block">
+            <p className="text-sm font-medium text-[#0F172A]">User</p>
+            <p className="text-xs text-[#64748B]">Free plan</p>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }

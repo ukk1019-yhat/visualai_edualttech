@@ -74,9 +74,9 @@ export default function NeuralNetworkPage() {
 
   const layers = useMemo(
     () => [
-      { label: 'Input', count: layerSizes.input, color: 'var(--neon-blue)' },
-      { label: 'Hidden', count: layerSizes.hidden, color: 'var(--neon-purple)' },
-      { label: 'Output', count: layerSizes.output, color: 'var(--neon-green)' },
+      { label: 'Input', count: layerSizes.input, color: '#082C4E' },
+      { label: 'Hidden', count: layerSizes.hidden, color: '#8B5CF6' },
+      { label: 'Output', count: layerSizes.output, color: '#16A34A' },
     ],
     [layerSizes]
   );
@@ -273,7 +273,7 @@ export default function NeuralNetworkPage() {
                         y1={y1}
                         x2={x2}
                         y2={y2}
-                        stroke={w >= 0 ? 'var(--neon-blue)' : 'var(--neon-purple)'}
+                        stroke={w >= 0 ? '#082C4E' : '#8B5CF6'}
                         strokeWidth={isHovered ? thickness + 2 : thickness}
                         opacity={opacity}
                         className="transition-all duration-200"
@@ -297,7 +297,7 @@ export default function NeuralNetworkPage() {
                           height={20}
                           rx={4}
                           fill="rgba(0,0,0,0.85)"
-                          stroke="var(--neon-blue)"
+                          stroke="#082C4E"
                           strokeWidth={1}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -341,7 +341,7 @@ export default function NeuralNetworkPage() {
                         y1={y1}
                         x2={x2}
                         y2={y2}
-                        stroke={w >= 0 ? 'var(--neon-purple)' : 'var(--neon-green)'}
+                        stroke={w >= 0 ? '#8B5CF6' : '#16A34A'}
                         strokeWidth={isHovered ? thickness + 2 : thickness}
                         opacity={opacity}
                         className="transition-all duration-200"
@@ -365,7 +365,7 @@ export default function NeuralNetworkPage() {
                           height={20}
                           rx={4}
                           fill="rgba(0,0,0,0.85)"
-                          stroke="var(--neon-green)"
+                          stroke="#16A34A"
                           strokeWidth={1}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -471,10 +471,10 @@ export default function NeuralNetworkPage() {
                   const fromLayer = p.layerFrom;
                   const color =
                     fromLayer === 0
-                      ? 'var(--neon-blue)'
+                      ? '#082C4E'
                       : fromLayer === 1
-                      ? 'var(--neon-purple)'
-                      : 'var(--neon-green)';
+                      ? '#8B5CF6'
+                      : '#16A34A';
                   return (
                     <motion.circle
                       key={p.id}
@@ -503,7 +503,7 @@ export default function NeuralNetworkPage() {
               <button
                 onClick={runForwardPass}
                 disabled={running}
-                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-[var(--neon-blue)]/20 text-[var(--neon-blue)] border border-[var(--neon-blue)]/30 hover:bg-[var(--neon-blue)]/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-[#082C4E]/20 text-[#082C4E] border border-[#082C4E]/30 hover:bg-[#082C4E]/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 {running ? 'Running...' : 'Run Forward'}
               </button>
@@ -524,7 +524,7 @@ export default function NeuralNetworkPage() {
                         max={10}
                         value={layerSizes[layer]}
                         onChange={(e) => handleSizeChange(layer, parseInt(e.target.value) || 1)}
-                        className="w-16 px-2 py-1 text-xs font-mono text-right bg-black/30 border border-border rounded-md focus:outline-none focus:border-[var(--neon-blue)] transition-colors"
+                        className="w-16 px-2 py-1 text-xs font-mono text-right bg-black/30 border border-border rounded-md focus:outline-none focus:border-[#082C4E] transition-colors"
                       />
                     </div>
                   ))}
@@ -540,7 +540,7 @@ export default function NeuralNetworkPage() {
                         onClick={() => setActivation(fn)}
                         className={`px-2.5 py-1 text-[10px] font-medium rounded-md transition-all ${
                           activation === fn
-                            ? 'bg-[var(--neon-purple)]/30 text-[var(--neon-purple)] border border-[var(--neon-purple)]/50'
+                            ? 'bg-[#8B5CF6]/30 text-[#8B5CF6] border border-[#8B5CF6]/50'
                             : 'bg-black/20 text-muted-foreground border border-transparent hover:border-border'
                         }`}
                       >
@@ -560,7 +560,7 @@ export default function NeuralNetworkPage() {
                         onClick={() => handleInitChange(scheme)}
                         className={`px-2.5 py-1 text-[10px] font-medium rounded-md capitalize transition-all ${
                           initScheme === scheme
-                            ? 'bg-[var(--neon-blue)]/30 text-[var(--neon-blue)] border border-[var(--neon-blue)]/50'
+                            ? 'bg-[#082C4E]/30 text-[#082C4E] border border-[#082C4E]/50'
                             : 'bg-black/20 text-muted-foreground border border-transparent hover:border-border'
                         }`}
                       >
@@ -573,7 +573,7 @@ export default function NeuralNetworkPage() {
                 {/* Randomize button */}
                 <button
                   onClick={handleRandomize}
-                  className="w-full px-3 py-1.5 text-xs font-medium rounded-lg bg-[var(--neon-green)]/20 text-[var(--neon-green)] border border-[var(--neon-green)]/30 hover:bg-[var(--neon-green)]/30 transition-all"
+                  className="w-full px-3 py-1.5 text-xs font-medium rounded-lg bg-[#16A34A]/20 text-[#16A34A] border border-[#16A34A]/30 hover:bg-[#16A34A]/30 transition-all"
                 >
                   Randomize Weights
                 </button>
@@ -590,7 +590,7 @@ export default function NeuralNetworkPage() {
                         l.label === 'Input'
                           ? 'info'
                           : l.label === 'Hidden'
-                          ? 'purple'
+                          ? 'navy'
                           : 'success'
                       }
                     >
@@ -646,21 +646,21 @@ export default function NeuralNetworkPage() {
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-0.5 rounded"
-                      style={{ background: 'var(--neon-blue)' }}
+                      style={{ background: '#082C4E' }}
                     />
                     <span className="text-muted-foreground font-mono">Positive weight</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-0.5 rounded"
-                      style={{ background: 'var(--neon-purple)' }}
+                      style={{ background: '#8B5CF6' }}
                     />
                     <span className="text-muted-foreground font-mono">Negative weight</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-0.5 rounded"
-                      style={{ background: 'var(--neon-green)' }}
+                      style={{ background: '#16A34A' }}
                     />
                     <span className="text-muted-foreground font-mono">Output signal</span>
                   </div>

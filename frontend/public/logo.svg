@@ -1,0 +1,6 @@
+<svg viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="36" height="40" rx="10" fill="#082C4E"/>
+  <text x="18" y="28" textAnchor="middle" fill="white" fontFamily="system-ui, sans-serif" fontSize="20" fontWeight="800">E</text>
+  <text x="48" y="28" fill="#0F172A" fontFamily="system-ui, sans-serif" fontSize="20" fontWeight="800">EduAlt</text>
+  <text x="126" y="28" fill="#16A34A" fontFamily="system-ui, sans-serif" fontSize="20" fontWeight="800">Tech</text>
+</svg>

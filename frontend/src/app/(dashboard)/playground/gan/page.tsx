@@ -324,7 +324,7 @@ export default function GanPage() {
             {/* Noise Dim */}
             <div className="space-y-2">
               <label className="text-xs font-mono text-muted-foreground">
-                Noise Dimension: <span className="text-[var(--neon-blue)] font-bold">{noiseDim}</span>
+                Noise Dimension: <span className="text-[#082C4E] font-bold">{noiseDim}</span>
               </label>
               <input
                 type="range"
@@ -389,8 +389,8 @@ export default function GanPage() {
       {/* Generator + Discriminator */}
       <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Generator */}
-        <GlassCard className="relative overflow-hidden border-[var(--neon-blue)]/20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-blue)]/5 to-transparent pointer-events-none" />
+        <GlassCard className="relative overflow-hidden border-[#082C4E]/20">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#082C4E]/5 to-transparent pointer-events-none" />
           <CardHeader
             title="Generator"
             description="Noise → Fake Image"
@@ -407,7 +407,7 @@ export default function GanPage() {
                       key={i}
                       className="w-2 h-2 rounded-sm"
                       style={{
-                        backgroundColor: `var(--neon-blue)`,
+                        backgroundColor: `#082C4E`,
                         opacity: 0.3 + Math.abs(v) * 0.5,
                       }}
                       animate={{ opacity: 0.3 + Math.abs(v) * 0.5 }}
@@ -422,7 +422,7 @@ export default function GanPage() {
                 className="text-2xl"
                 animate={{ x: [0, 4, 0] }}
                 transition={{ duration: 1, repeat: Infinity }}
-                style={{ color: 'var(--neon-blue)' }}
+                style={{ color: '#082C4E' }}
               >
                 →
               </motion.div>
@@ -445,15 +445,15 @@ export default function GanPage() {
             </div>
 
             {/* Generator loss */}
-            <div className="mt-4 p-3 rounded-lg bg-black/20 border border-[var(--neon-blue)]/10">
+            <div className="mt-4 p-3 rounded-lg bg-black/20 border border-[#082C4E]/10">
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-mono text-[var(--neon-blue)]">Generator Loss</span>
-                <span className="font-mono font-bold" style={{ color: 'var(--neon-blue)' }}>{gLoss.toFixed(3)}</span>
+                <span className="font-mono text-[#082C4E]">Generator Loss</span>
+                <span className="font-mono font-bold" style={{ color: '#082C4E' }}>{gLoss.toFixed(3)}</span>
               </div>
-              <div className="h-1.5 rounded-full bg-[var(--neon-blue)]/10 overflow-hidden">
+              <div className="h-1.5 rounded-full bg-[#082C4E]/10 overflow-hidden">
                 <motion.div
                   className="h-full rounded-full"
-                  style={{ backgroundColor: 'var(--neon-blue)' }}
+                  style={{ backgroundColor: '#082C4E' }}
                   animate={{ width: `${Math.min(100, gLoss * 40)}%` }}
                   transition={{ duration: 0.4 }}
                 />
@@ -463,12 +463,12 @@ export default function GanPage() {
         </GlassCard>
 
         {/* Discriminator */}
-        <GlassCard className="relative overflow-hidden border-[var(--neon-purple)]/20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-purple)]/5 to-transparent pointer-events-none" />
+        <GlassCard className="relative overflow-hidden border-[#8B5CF6]/20">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/5 to-transparent pointer-events-none" />
           <CardHeader
             title="Discriminator"
             description="Real / Fake Classification"
-            action={<Badge variant="purple">D</Badge>}
+            action={<Badge variant="info">D</Badge>}
           />
           <CardContent>
             <div className="flex items-center justify-center gap-6 py-4">
@@ -486,8 +486,8 @@ export default function GanPage() {
 
               {/* D Network */}
               <div className="flex items-center gap-4">
-                <NeuronLayer count={8} label="Hidden" color="var(--neon-purple)" active />
-                <NeuronLayer count={4} label="Hidden" color="var(--neon-purple)" active />
+                <NeuronLayer count={8} label="Hidden" color="#8B5CF6" active />
+                <NeuronLayer count={4} label="Hidden" color="#8B5CF6" active />
               </div>
 
               {/* Arrow */}
@@ -495,7 +495,7 @@ export default function GanPage() {
                 className="text-2xl"
                 animate={{ x: [0, 4, 0] }}
                 transition={{ duration: 1, repeat: Infinity }}
-                style={{ color: 'var(--neon-purple)' }}
+                style={{ color: '#8B5CF6' }}
               >
                 →
               </motion.div>
@@ -506,8 +506,8 @@ export default function GanPage() {
                 <motion.div
                   className="w-16 h-16 rounded-full flex items-center justify-center text-xs font-bold font-mono border-2"
                   style={{
-                    borderColor: dScore > 0.5 ? 'var(--neon-green)' : 'var(--neon-purple)',
-                    color: dScore > 0.5 ? 'var(--neon-green)' : 'var(--neon-purple)',
+                    borderColor: dScore > 0.5 ? '#16A34A' : '#8B5CF6',
+                    color: dScore > 0.5 ? '#16A34A' : '#8B5CF6',
                   }}
                   animate={{
                     boxShadow: dScore > 0.5
@@ -524,15 +524,15 @@ export default function GanPage() {
             </div>
 
             {/* D loss */}
-            <div className="mt-4 p-3 rounded-lg bg-black/20 border border-[var(--neon-purple)]/10">
+            <div className="mt-4 p-3 rounded-lg bg-black/20 border border-[#8B5CF6]/10">
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-mono text-[var(--neon-purple)]">Discriminator Loss</span>
-                <span className="font-mono font-bold" style={{ color: 'var(--neon-purple)' }}>{dLoss.toFixed(3)}</span>
+                <span className="font-mono text-[#8B5CF6]">Discriminator Loss</span>
+                <span className="font-mono font-bold" style={{ color: '#8B5CF6' }}>{dLoss.toFixed(3)}</span>
               </div>
-              <div className="h-1.5 rounded-full bg-[var(--neon-purple)]/10 overflow-hidden">
+              <div className="h-1.5 rounded-full bg-[#8B5CF6]/10 overflow-hidden">
                 <motion.div
                   className="h-full rounded-full"
-                  style={{ backgroundColor: 'var(--neon-purple)' }}
+                  style={{ backgroundColor: '#8B5CF6' }}
                   animate={{ width: `${Math.min(100, dLoss * 40)}%` }}
                   transition={{ duration: 0.4 }}
                 />
@@ -567,7 +567,7 @@ export default function GanPage() {
                       <polyline
                         points={ptsG.join(' ')}
                         fill="none"
-                        stroke="var(--neon-blue)"
+                        stroke="#082C4E"
                         strokeWidth={2}
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -575,7 +575,7 @@ export default function GanPage() {
                       <polyline
                         points={ptsD.join(' ')}
                         fill="none"
-                        stroke="var(--neon-purple)"
+                        stroke="#8B5CF6"
                         strokeWidth={2}
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -589,8 +589,8 @@ export default function GanPage() {
                 <span>Step {history[history.length - 1]?.step ?? 0}</span>
               </div>
               <div className="absolute top-0 left-0 flex gap-4 text-[10px] font-mono">
-                <span className="text-[var(--neon-blue)]">G loss</span>
-                <span className="text-[var(--neon-purple)]">D loss</span>
+                <span className="text-[#082C4E]">G loss</span>
+                <span className="text-[#8B5CF6]">D loss</span>
               </div>
             </div>
           )}

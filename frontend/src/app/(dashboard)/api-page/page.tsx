@@ -110,7 +110,7 @@ export default function ApiPage() {
             }`}
           >
             <span className={`text-[10px] font-bold ${
-              ep.method === 'GET' ? 'text-[var(--neon-green)]' : 'text-[var(--neon-blue)]'
+              ep.method === 'GET' ? 'text-[#16A34A]' : 'text-[#082C4E]'
             }`}>{ep.method}</span>
             {ep.path}
           </button>
@@ -130,7 +130,7 @@ export default function ApiPage() {
               <CardContent>
                 <div className="flex items-start gap-4 mb-4">
                   <div className={`px-3 py-1 rounded-lg text-sm font-mono font-bold ${
-                    ep.method === 'GET' ? 'bg-[var(--neon-green)]/10 text-[var(--neon-green)]' : 'bg-[var(--neon-blue)]/10 text-[var(--neon-blue)]'
+                    ep.method === 'GET' ? 'bg-[#16A34A]/10 text-[#16A34A]' : 'bg-[#082C4E]/10 text-[#082C4E]'
                   }`}>{ep.method}</div>
                   <div className="flex-1 min-w-0">
                     <code className="text-sm font-mono">{ep.path}</code>

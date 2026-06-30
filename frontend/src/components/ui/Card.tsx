@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils';
 
 interface GlassCardProps {
@@ -14,8 +12,8 @@ export function GlassCard({ children, className, hover, onClick }: GlassCardProp
     <div
       onClick={onClick}
       className={cn(
-        'glass rounded-xl border border-border',
-        hover && 'cursor-pointer hover:border-primary/30 transition-all duration-200',
+        'bg-white rounded-2xl border border-[#E5E7EB] shadow-sm',
+        hover && 'cursor-pointer card-hover',
         className
       )}
     >
@@ -33,10 +31,10 @@ interface CardHeaderProps {
 
 export function CardHeader({ title, description, action, className }: CardHeaderProps) {
   return (
-    <div className={cn('flex items-start justify-between gap-4 p-5 pb-0', className)}>
+    <div className={cn('flex items-start justify-between gap-4 p-6 pb-0', className)}>
       <div className="space-y-1">
-        <h3 className="font-semibold text-foreground">{title}</h3>
-        {description && <p className="text-xs text-muted-foreground">{description}</p>}
+        <h3 className="font-semibold text-[#0F172A]">{title}</h3>
+        {description && <p className="text-sm text-[#64748B]">{description}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>
@@ -50,5 +48,5 @@ interface CardContentProps {
 }
 
 export function CardContent({ children, className, style }: CardContentProps) {
-  return <div className={cn('p-5', className)} style={style}>{children}</div>;
+  return <div className={cn('p-6', className)} style={style}>{children}</div>;
 }
