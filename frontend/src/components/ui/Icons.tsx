@@ -312,6 +312,58 @@ export function IconGlobe({ size, className, ...props }: IconProps) {
   );
 }
 
+export function IconMessage({ size, className, ...props }: IconProps) {
+  return (
+    <Icon size={size} className={className} {...props}>
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </Icon>
+  );
+}
+
+export function IconDocument({ size, className, ...props }: IconProps) {
+  return (
+    <Icon size={size} className={className} {...props}>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <polyline points="10 9 9 9 8 9" />
+    </Icon>
+  );
+}
+
+export function IconBook({ size, className, ...props }: IconProps) {
+  return (
+    <Icon size={size} className={className} {...props}>
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      <line x1="10" y1="2" x2="10" y2="10" />
+      <line x1="14" y1="6" x2="14" y2="12" />
+    </Icon>
+  );
+}
+
+export function IconPlug({ size, className, ...props }: IconProps) {
+  return (
+    <Icon size={size} className={className} {...props}>
+      <path d="M12 22v-5" />
+      <path d="M9 8V2" />
+      <path d="M15 8V2" />
+      <path d="M18 8v5a6 6 0 0 1-6 6" />
+      <path d="M6 8v5c0 1.7.7 3.3 1.8 4.4" />
+    </Icon>
+  );
+}
+
+export function IconTrending({ size, className, ...props }: IconProps) {
+  return (
+    <Icon size={size} className={className} {...props}>
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
+    </Icon>
+  );
+}
+
 export function IconBot({ size, className, ...props }: IconProps) {
   return (
     <Icon size={size} className={className} {...props}>

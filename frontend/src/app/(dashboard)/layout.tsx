@@ -1,38 +1,39 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { IconMessage, IconTokens, IconEmbed, IconTarget, IconClock, IconDocument, IconBot, IconChart, IconWrench, IconGamepad, IconBook, IconPlug, IconTrending } from '@/components/ui/Icons';
 
-const navGroups = [
+const navGroups: { section: string; items: { label: string; href: string; icon: ReactNode }[] }[] = [
   {
     section: 'AI Playground',
     items: [
-      { label: 'Chat', href: '/playground/chat', icon: '💬' },
-      { label: 'Token Viewer', href: '/playground/token-viewer', icon: '🔤' },
-      { label: 'Embeddings', href: '/playground/embeddings', icon: '🌌' },
-      { label: 'Attention', href: '/playground/attention', icon: '🎯' },
-      { label: 'Reasoning', href: '/playground/reasoning', icon: '⏱️' },
-      { label: 'Output', href: '/playground/output', icon: '📄' },
+      { label: 'Chat', href: '/playground/chat', icon: <IconMessage size={18} /> },
+      { label: 'Token Viewer', href: '/playground/token-viewer', icon: <IconTokens size={18} /> },
+      { label: 'Embeddings', href: '/playground/embeddings', icon: <IconEmbed size={18} /> },
+      { label: 'Attention', href: '/playground/attention', icon: <IconTarget size={18} /> },
+      { label: 'Reasoning', href: '/playground/reasoning', icon: <IconClock size={18} /> },
+      { label: 'Output', href: '/playground/output', icon: <IconDocument size={18} /> },
     ],
   },
   {
     section: 'AI Models',
     items: [
-      { label: 'Models', href: '/models', icon: '🤖' },
+      { label: 'Models', href: '/models', icon: <IconBot size={18} /> },
     ],
   },
   {
     section: 'Tools',
     items: [
-      { label: 'Visualizations', href: '/visualizations', icon: '📊' },
-      { label: 'Agent Builder', href: '/agent-builder', icon: '🔧' },
-      { label: 'AI Simulator', href: '/simulator', icon: '🎮' },
-      { label: 'Learn AI', href: '/learn', icon: '📚' },
-      { label: 'API', href: '/api-page', icon: '🔌' },
-      { label: 'Dashboard', href: '/dashboard-page', icon: '📈' },
+      { label: 'Visualizations', href: '/visualizations', icon: <IconChart size={18} /> },
+      { label: 'Agent Builder', href: '/agent-builder', icon: <IconWrench size={18} /> },
+      { label: 'AI Simulator', href: '/simulator', icon: <IconGamepad size={18} /> },
+      { label: 'Learn AI', href: '/learn', icon: <IconBook size={18} /> },
+      { label: 'API', href: '/api-page', icon: <IconPlug size={18} /> },
+      { label: 'Dashboard', href: '/dashboard-page', icon: <IconTrending size={18} /> },
     ],
   },
 ];
@@ -91,7 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     )}
                     title={collapsed ? item.label : undefined}
                   >
-                    <span className="text-lg shrink-0">{item.icon}</span>
+                    <span className="shrink-0 text-foreground">{item.icon}</span>
                     <AnimatePresence>
                       {!collapsed && (
                         <motion.span
