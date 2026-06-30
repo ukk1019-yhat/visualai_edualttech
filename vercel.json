@@ -1,18 +1,19 @@
 {
-    "services": {
-        "frontend": {
-            "root": "frontend",
-            "framework": "nextjs"
-        },
-        "backend": {
-            "root": "backend",
-            "entrypoint": "api/index.py"
-        }
+  "experimentalServices": {
+    "frontend": {
+      "entrypoint": "frontend",
+      "routePrefix": "/",
+      "framework": "nextjs"
     },
-    "rewrites": [
-        {
-            "source": "/api/backend(/.*)?",
-            "destination": "/_/backend$1"
-        }
-    ]
+    "backend": {
+      "entrypoint": "backend",
+      "routePrefix": "/_/backend"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/backend(/.*)?",
+      "destination": "/_/backend$1"
+    }
+  ]
 }
