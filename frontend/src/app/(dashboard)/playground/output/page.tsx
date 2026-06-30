@@ -132,7 +132,7 @@ export default function OutputPage() {
                 <motion.span
                   animate={{ opacity: [0, 1, 0] }}
                   transition={{ duration: 0.5, repeat: Infinity }}
-                  className="inline-block w-0.5 h-4 sm:h-5 bg-[#082C4E] ml-0.5 align-middle"
+                  className="inline-block w-0.5 h-4 sm:h-5 bg-[var(--neon-blue)] ml-0.5 align-middle"
                 />
               )}
             </div>

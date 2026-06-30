@@ -37,11 +37,11 @@ export default function ReasoningPage() {
       const data = await res.json();
 
       const stepLabels = [
-        { id: 'tokenize', label: 'Tokenized', color: 'text-[#16A34A]' },
-        { id: 'embed', label: 'Embedding', color: 'text-[#082C4E]' },
-        { id: 'attention', label: 'Attention', color: 'text-[#8B5CF6]' },
-        { id: 'layers', label: 'Transformer Layers', color: 'text-[#082C4E]' },
-        { id: 'reasoning', label: 'Reasoning', color: 'text-[#16A34A]' },
+        { id: 'tokenize', label: 'Tokenized', color: 'text-[var(--neon-green)]' },
+        { id: 'embed', label: 'Embedding', color: 'text-[var(--neon-blue)]' },
+        { id: 'attention', label: 'Attention', color: 'text-[var(--neon-purple)]' },
+        { id: 'layers', label: 'Transformer Layers', color: 'text-[var(--neon-blue)]' },
+        { id: 'reasoning', label: 'Reasoning', color: 'text-[var(--neon-green)]' },
         { id: 'safety', label: 'Safety Check', color: 'text-[var(--warning)]' },
       ];
 
@@ -56,7 +56,7 @@ export default function ReasoningPage() {
         };
       });
       timelineSteps.unshift({ time: '0 ms', label: 'Received Prompt', color: 'text-muted-foreground', desc: 'Input received by the model' });
-      timelineSteps.push({ time: data.latency ? `${data.latency.toFixed(0)} ms` : '-', label: 'Output Generated', color: 'text-[#16A34A]', desc: 'Response streamed to user' });
+      timelineSteps.push({ time: data.latency ? `${data.latency.toFixed(0)} ms` : '-', label: 'Output Generated', color: 'text-[var(--neon-green)]', desc: 'Response streamed to user' });
 
       setSteps(timelineSteps);
       for (let i = 0; i < timelineSteps.length; i++) {
@@ -145,16 +145,16 @@ export default function ReasoningPage() {
                     <div
                       className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
                         isDone
-                          ? 'bg-[#16A34A] border-[#16A34A] shadow-[0_0_6px_#16A34A]'
+                          ? 'bg-[var(--neon-green)] border-[var(--neon-green)] shadow-[0_0_6px_var(--neon-green)]'
                           : isActive
-                          ? 'bg-[#082C4E] border-[#082C4E] animate-pulse-glow'
+                          ? 'bg-[var(--neon-blue)] border-[var(--neon-blue)] animate-pulse-glow'
                           : 'bg-background border-border'
                       }`}
                     />
                     {i < steps.length - 1 && (
                       <motion.div
                         className="w-0.5 flex-1 bg-border"
-                        animate={isDone ? { backgroundColor: '#16A34A' } : {}}
+                        animate={isDone ? { backgroundColor: 'var(--neon-green)' } : {}}
                         transition={{ duration: 0.3 }}
                       />
                     )}
@@ -174,7 +174,7 @@ export default function ReasoningPage() {
                         <span className={`text-xs sm:text-sm font-mono font-medium ${item.color} truncate`}>
                           {item.label}
                         </span>
-                        {isDone && <span className="text-[#16A34A] text-xs shrink-0">✓</span>}
+                        {isDone && <span className="text-[var(--neon-green)] text-xs shrink-0">✓</span>}
                       </div>
                       <span className="text-xs font-mono text-muted-foreground shrink-0">{item.time}</span>
                     </div>
@@ -184,7 +184,7 @@ export default function ReasoningPage() {
                         <motion.div
                           animate={{ width: ['0%', '100%'] }}
                           transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-                          className="h-full rounded-full bg-gradient-to-r from-[#082C4E] to-[#8B5CF6]"
+                          className="h-full rounded-full bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)]"
                         />
                       </div>
                     )}
@@ -212,7 +212,7 @@ export default function ReasoningPage() {
             <p className="text-xs text-muted-foreground mb-1">{stat.label}</p>
             <p className="text-lg sm:text-xl font-bold font-mono">{stat.value}</p>
             {stat.change && (
-              <p className={`text-xs mt-1 ${stat.positive ? 'text-[#16A34A]' : 'text-[#DC2626]'}`}>
+              <p className={`text-xs mt-1 ${stat.positive ? 'text-[var(--neon-green)]' : 'text-[var(--danger)]'}`}>
                 {stat.change} vs. average
               </p>
             )}

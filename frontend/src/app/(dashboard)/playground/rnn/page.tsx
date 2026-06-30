@@ -275,7 +275,7 @@ export default function RNNPage() {
               {mode === 'rnn' ? 'Vanilla RNN' : 'LSTM'} &middot; Unfolded
             </Badge>
             <div className="flex gap-2">
-              <Badge variant="info">{numSteps} steps</Badge>
+              <Badge variant="purple">{numSteps} steps</Badge>
               <Badge variant="default">hidden size: {hiddenSize}</Badge>
               <Badge variant="success">{paramCount} params</Badge>
             </div>
@@ -292,7 +292,7 @@ export default function RNNPage() {
                   <polygon points="0 0, 10 3.5, 0 7" fill="rgba(148,163,184,0.4)" />
                 </marker>
                 <marker id="arrowhead-active" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                  <polygon points="0 0, 10 3.5, 0 7" fill="#082C4E" />
+                  <polygon points="0 0, 10 3.5, 0 7" fill="var(--neon-blue)" />
                 </marker>
                 <filter id="node-glow">
                   <feGaussianBlur stdDeviation="4" result="blur" />
@@ -311,9 +311,9 @@ export default function RNNPage() {
                   const isCurrent = activeStep === step;
 
                   const nodeColor = isCurrent
-                    ? '#082C4E'
+                    ? 'var(--neon-blue)'
                     : isDone
-                    ? '#16A34A'
+                    ? 'var(--neon-green)'
                     : 'rgba(148,163,184,0.3)';
 
                   const textColor = isCurrent || isDone ? '#fff' : 'rgba(148,163,184,0.6)';
@@ -349,9 +349,9 @@ export default function RNNPage() {
                           y2={hiddenY}
                           stroke={
                             isCurrent
-                              ? '#082C4E'
+                              ? 'var(--neon-blue)'
                               : isDone
-                              ? '#16A34A'
+                              ? 'var(--neon-green)'
                               : 'rgba(148,163,184,0.2)'
                           }
                           strokeWidth={isCurrent || isDone ? 2.5 : 1.5}
@@ -367,7 +367,7 @@ export default function RNNPage() {
                         y1={inputY + 22}
                         x2={cx}
                         y2={hiddenY - hiddenNodeHeight / 2 + 12}
-                        stroke={isActive ? '#082C4E' : 'rgba(148,163,184,0.15)'}
+                        stroke={isActive ? 'var(--neon-blue)' : 'rgba(148,163,184,0.15)'}
                         strokeWidth={isActive ? 2 : 1}
                         markerEnd={isActive ? 'url(#arrowhead-active)' : 'url(#arrowhead)'}
                         opacity={isActive ? 1 : 0.3}
@@ -379,7 +379,7 @@ export default function RNNPage() {
                         y1={hiddenY + hiddenNodeHeight / 2 - 12}
                         x2={cx}
                         y2={outputY - 22}
-                        stroke={isActive ? '#082C4E' : 'rgba(148,163,184,0.15)'}
+                        stroke={isActive ? 'var(--neon-blue)' : 'rgba(148,163,184,0.15)'}
                         strokeWidth={isActive ? 2 : 1}
                         markerEnd={isActive ? 'url(#arrowhead-active)' : 'url(#arrowhead)'}
                         opacity={isActive ? 1 : 0.3}
@@ -401,15 +401,15 @@ export default function RNNPage() {
                         }
                         stroke={
                           isCurrent
-                            ? '#082C4E'
+                            ? 'var(--neon-blue)'
                             : isDone
-                            ? '#16A34A'
+                            ? 'var(--neon-green)'
                             : 'rgba(148,163,184,0.15)'
                         }
                         strokeWidth={isCurrent ? 2 : 1}
                         animate={
                           isCurrent
-                            ? { boxShadow: '0 0 12px #082C4E' }
+                            ? { boxShadow: '0 0 12px var(--neon-blue)' }
                             : {}
                         }
                       />
@@ -427,7 +427,7 @@ export default function RNNPage() {
                         y={inputY + 36}
                         textAnchor="middle"
                         className="text-[11px] font-mono font-bold"
-                        fill={isCurrent ? '#082C4E' : textColor}
+                        fill={isCurrent ? 'var(--neon-blue)' : textColor}
                       >
                         {state.input.toFixed(2)}
                       </text>
@@ -455,9 +455,9 @@ export default function RNNPage() {
                           }
                           stroke={
                             isCurrent
-                              ? '#8B5CF6'
+                              ? 'var(--neon-purple)'
                               : isDone
-                              ? '#16A34A'
+                              ? 'var(--neon-green)'
                               : 'rgba(148,163,184,0.15)'
                           }
                           strokeWidth={isCurrent ? 2 : 1}
@@ -480,9 +480,9 @@ export default function RNNPage() {
                             className="text-[9px] font-mono"
                             fill={
                               isCurrent
-                                ? '#082C4E'
+                                ? 'var(--neon-blue)'
                                 : isDone
-                                ? '#16A34A'
+                                ? 'var(--neon-green)'
                                 : 'rgba(148,163,184,0.5)'
                             }
                           >
@@ -507,9 +507,9 @@ export default function RNNPage() {
                         }
                         stroke={
                           isCurrent
-                            ? '#082C4E'
+                            ? 'var(--neon-blue)'
                             : isDone
-                            ? '#16A34A'
+                            ? 'var(--neon-green)'
                             : 'rgba(148,163,184,0.15)'
                         }
                         strokeWidth={isCurrent ? 2 : 1}
@@ -528,7 +528,7 @@ export default function RNNPage() {
                         y={outputY + 36}
                         textAnchor="middle"
                         className="text-[11px] font-mono font-bold"
-                        fill={isCurrent ? '#082C4E' : textColor}
+                        fill={isCurrent ? 'var(--neon-blue)' : textColor}
                       >
                         {state.output.toFixed(2)}
                       </text>
@@ -559,9 +559,9 @@ export default function RNNPage() {
                             gates
                           </text>
                           {[
-                            { label: 'i', value: state.gates.inputGate, color: '#082C4E' },
-                            { label: 'f', value: state.gates.forgetGate, color: '#16A34A' },
-                            { label: 'o', value: state.gates.outputGate, color: '#8B5CF6' },
+                            { label: 'i', value: state.gates.inputGate, color: 'var(--neon-blue)' },
+                            { label: 'f', value: state.gates.forgetGate, color: 'var(--neon-green)' },
+                            { label: 'o', value: state.gates.outputGate, color: 'var(--neon-purple)' },
                             { label: 'c', value: state.gates.cellState, color: '#f59e0b' },
                           ].map((g, gi) => (
                             <g key={g.label}>
@@ -604,9 +604,9 @@ export default function RNNPage() {
 
               {/* Legend */}
               <g transform={`translate(20, ${svgHeight - 40})`}>
-                <rect x={0} y={0} width={8} height={8} rx={2} fill="#082C4E" opacity={0.6} />
+                <rect x={0} y={0} width={8} height={8} rx={2} fill="var(--neon-blue)" opacity={0.6} />
                 <text x={12} y={7} className="text-[8px] font-mono fill-muted-foreground">active</text>
-                <rect x={70} y={0} width={8} height={8} rx={2} fill="#16A34A" opacity={0.6} />
+                <rect x={70} y={0} width={8} height={8} rx={2} fill="var(--neon-green)" opacity={0.6} />
                 <text x={82} y={7} className="text-[8px] font-mono fill-muted-foreground">processed</text>
                 <rect x={150} y={0} width={8} height={8} rx={2} fill="rgba(148,163,184,0.3)" opacity={0.6} />
                 <text x={162} y={7} className="text-[8px] font-mono fill-muted-foreground">pending</text>
@@ -648,7 +648,7 @@ export default function RNNPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Parameters</span>
-                  <span className="text-[#082C4E]">{paramCount.toLocaleString()}</span>
+                  <span className="text-[var(--neon-blue)]">{paramCount.toLocaleString()}</span>
                 </div>
                 {mode === 'lstm' && (
                   <>
@@ -658,7 +658,7 @@ export default function RNNPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Cell State</span>
-                      <span className="text-[#082C4E]">{hiddenSize}-d</span>
+                      <span className="text-[var(--neon-blue)]">{hiddenSize}-d</span>
                     </div>
                   </>
                 )}

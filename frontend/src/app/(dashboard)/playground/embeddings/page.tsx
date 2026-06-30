@@ -82,7 +82,7 @@ export default function EmbeddingsPage() {
           <CardContent className="p-0 relative overflow-hidden" style={{ minHeight: 400 }}>
             <div className="absolute top-3 left-3 z-10 flex gap-2">
               <Badge variant="info">{words.length} words</Badge>
-              <Badge variant="info">3D Space</Badge>
+              <Badge variant="purple">3D Space</Badge>
             </div>
 
             <svg viewBox="-150 -150 300 300" className="w-full h-full" style={{ minHeight: 400 }}>
@@ -103,7 +103,7 @@ export default function EmbeddingsPage() {
                 </g>
               ))}
 
-              <circle cx="0" cy="0" r="3" fill="#8B5CF6" opacity="0.5" />
+              <circle cx="0" cy="0" r="3" fill="var(--neon-purple)" opacity="0.5" />
               <text x="5" y="4" className="text-[8px] fill-muted-foreground font-mono">origin</text>
 
               <AnimatePresence>
@@ -174,7 +174,7 @@ export default function EmbeddingsPage() {
                       initial={{ width: 0 }}
                       animate={{ width: `${sim.sim * 100}%` }}
                       transition={{ duration: 0.6, delay: 0.2 }}
-                      className="h-full rounded-full bg-gradient-to-r from-[#082C4E] to-[#8B5CF6]"
+                      className="h-full rounded-full bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)]"
                     />
                   </div>
                 </div>

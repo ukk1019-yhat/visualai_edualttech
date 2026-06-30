@@ -171,7 +171,7 @@ export default function SimulatorPage() {
                     <span className="font-mono">{cmp.cost === 0 ? 'Free' : `$${cmp.cost.toFixed(6)}`}</span>
                     <div className="w-16 sm:w-24 h-1.5 rounded-full bg-muted overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#082C4E] to-[#8B5CF6]"
+                        className="h-full rounded-full bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)]"
                         style={{ width: `${Math.min(100, (cmp.latency / (result.latency * 1.5)) * 100)}%` }}
                       />
                     </div>

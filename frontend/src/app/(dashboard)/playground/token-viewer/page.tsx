@@ -89,11 +89,11 @@ export default function TokenViewerPage() {
                             </div>
                             <div className="flex justify-between text-xs">
                               <span className="text-muted-foreground">Position</span>
-                              <span className="font-mono text-[#8B5CF6]">{token.position}</span>
+                              <span className="font-mono text-[var(--neon-purple)]">{token.position}</span>
                             </div>
                             <div className="flex justify-between text-xs">
                               <span className="text-muted-foreground">Probability</span>
-                              <span className="font-mono text-[#16A34A]">
+                              <span className="font-mono text-[var(--neon-green)]">
                                 {(token.probability * 100).toFixed(0)}%
                               </span>
                             </div>
@@ -140,13 +140,13 @@ export default function TokenViewerPage() {
                         className="w-12 sm:w-16 h-1.5 rounded-full bg-muted overflow-hidden"
                       >
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#082C4E] to-[#16A34A]"
+                          className="h-full rounded-full bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-green)]"
                           style={{ width: `${token.probability * 100}%` }}
                         />
                       </div>
                       <span>{(token.probability * 100).toFixed(0)}%</span>
                     </div>
-                    <span className="text-[#8B5CF6] hidden sm:inline">pos: {token.position}</span>
+                    <span className="text-[var(--neon-purple)] hidden sm:inline">pos: {token.position}</span>
                   </div>
                 </motion.div>
               ))}

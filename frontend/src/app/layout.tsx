@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EduAltTech — Learn AI Interactively",
-  description: "Learn Artificial Intelligence through beautiful visualizations, interactive experiments, and real-world simulations.",
+  title: "EAT Neural Flow — See AI Think",
+  description: "Visualize every step of artificial intelligence. Watch tokens, neurons, attention heads, and decisions in real-time.",
 };
 
 export default function RootLayout({
@@ -26,10 +26,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[#FFFFFF] text-[#0F172A]">
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

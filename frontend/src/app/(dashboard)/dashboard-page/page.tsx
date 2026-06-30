@@ -69,7 +69,7 @@ export default function DashboardPage() {
                 <span className="text-lg">{stat.icon}</span>
               </div>
               <p className="text-xl sm:text-2xl font-bold font-mono">{stat.value}</p>
-              <p className={`text-xs mt-1 ${stat.positive ? 'text-[#16A34A]' : 'text-[#DC2626]'}`}>
+              <p className={`text-xs mt-1 ${stat.positive ? 'text-[var(--neon-green)]' : 'text-[var(--danger)]'}`}>
                 {stat.change} this week
               </p>
             </GlassCard>
@@ -84,11 +84,11 @@ export default function DashboardPage() {
           <CardContent>
             <div className="flex items-center gap-6 mb-6">
               <div className="flex items-center gap-2 text-xs">
-                <div className="w-3 h-3 rounded bg-[#082C4E]" />
+                <div className="w-3 h-3 rounded bg-[var(--neon-blue)]" />
                 <span className="text-muted-foreground">Requests</span>
               </div>
               <div className="flex items-center gap-2 text-xs">
-                <div className="w-3 h-3 rounded bg-[#8B5CF6]" />
+                <div className="w-3 h-3 rounded bg-[var(--neon-purple)]" />
                 <span className="text-muted-foreground">Tokens (M)</span>
               </div>
             </div>
@@ -101,14 +101,14 @@ export default function DashboardPage() {
                       initial={{ height: 0 }}
                       animate={{ height: `${(day.requests / maxReqs) * 100}%` }}
                       transition={{ duration: 0.4 }}
-                      className="w-full rounded-t bg-gradient-to-t from-[#082C4E] to-[#082C4E]/50"
+                      className="w-full rounded-t bg-gradient-to-t from-[var(--neon-blue)] to-[var(--neon-blue)]/50"
                       style={{ opacity: 0.7 }}
                     />
                     <motion.div
                       initial={{ height: 0 }}
                       animate={{ height: `${(day.tokens / maxTokens) * 100}%` }}
                       transition={{ duration: 0.4, delay: 0.1 }}
-                      className="w-full rounded-t bg-gradient-to-t from-[#8B5CF6] to-[#8B5CF6]/50"
+                      className="w-full rounded-t bg-gradient-to-t from-[var(--neon-purple)] to-[var(--neon-purple)]/50"
                       style={{ opacity: 0.7 }}
                     />
                   </div>
@@ -121,7 +121,7 @@ export default function DashboardPage() {
 
         {/* Model distribution */}
         <GlassCard>
-          <CardHeader title="Model Usage" action={<Badge variant="info">Distribution</Badge>} />
+          <CardHeader title="Model Usage" action={<Badge variant="purple">Distribution</Badge>} />
           <CardContent>
             <div className="space-y-4">
               {modelUsage.map((m) => (

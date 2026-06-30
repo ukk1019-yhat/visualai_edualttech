@@ -344,8 +344,8 @@ export default function CNNPage() {
                         }}
                         animate={hl ? {
                           scale: 1.15,
-                          boxShadow: '0 0 12px #082C4E',
-                          border: '1px solid #082C4E',
+                          boxShadow: '0 0 12px var(--neon-blue)',
+                          border: '1px solid var(--neon-blue)',
                         } : {
                           scale: 1,
                           boxShadow: 'none',
@@ -363,7 +363,7 @@ export default function CNNPage() {
               </div>
             </div>
             {pos && (
-              <p className="mt-2 text-center text-xs text-[#082C4E] font-mono">
+              <p className="mt-2 text-center text-xs text-[var(--neon-blue)] font-mono">
                 Kernel at ({pos.r}, {pos.c})
               </p>
             )}
@@ -371,7 +371,7 @@ export default function CNNPage() {
         </GlassCard>
 
         <GlassCard>
-          <CardHeader title="Kernel" action={<Badge variant="info">{kernelSize}&times;{kernelSize}</Badge>} />
+          <CardHeader title="Kernel" action={<Badge variant="purple">{kernelSize}&times;{kernelSize}</Badge>} />
           <CardContent>
             <div className="space-y-3">
               <div className="flex justify-center">
@@ -416,7 +416,7 @@ export default function CNNPage() {
                       )}
                     </div>
                   </div>
-                  <p className="text-center text-xs font-mono text-[#16A34A] mt-1">
+                  <p className="text-center text-xs font-mono text-[var(--neon-green)] mt-1">
                     Sum = {convSum.toFixed(2)}
                   </p>
                 </motion.div>
@@ -467,7 +467,7 @@ export default function CNNPage() {
               <div className="mt-3 space-y-1">
                 <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-[#082C4E] to-[#8B5CF6] rounded-full"
+                    className="h-full bg-gradient-to-r from-[var(--neon-blue)] to-[var(--neon-purple)] rounded-full"
                     animate={{ width: `${((currentPosIdx + 1) / positions.length) * 100}%` }}
                   />
                 </div>
@@ -484,11 +484,11 @@ export default function CNNPage() {
         <CardContent className="p-4 sm:p-5">
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
             {[
-              { label: 'Input Size', value: `${inputSize}\u00d7${inputSize}`, color: '#082C4E' },
-              { label: 'Kernel Size', value: `${kernelSize}\u00d7${kernelSize}`, color: '#8B5CF6' },
-              { label: 'Stride', value: String(stride), color: '#16A34A' },
-              { label: 'Output Size', value: `${outputSize}\u00d7${outputSize}`, color: '#082C4E' },
-              { label: 'Total Operations', value: totalOps.toLocaleString(), color: '#16A34A' },
+              { label: 'Input Size', value: `${inputSize}\u00d7${inputSize}`, color: 'var(--neon-blue)' },
+              { label: 'Kernel Size', value: `${kernelSize}\u00d7${kernelSize}`, color: 'var(--neon-purple)' },
+              { label: 'Stride', value: String(stride), color: 'var(--neon-green)' },
+              { label: 'Output Size', value: `${outputSize}\u00d7${outputSize}`, color: 'var(--neon-blue)' },
+              { label: 'Total Operations', value: totalOps.toLocaleString(), color: 'var(--neon-green)' },
             ].map(stat => (
               <div key={stat.label} className="text-center">
                 <p className="text-lg font-bold font-mono" style={{ color: stat.color }}>{stat.value}</p>

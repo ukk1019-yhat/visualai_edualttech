@@ -245,7 +245,7 @@ export default function AttentionPage() {
             <GlassCard key={layer}>
               <CardHeader
                 title={`Layer ${layer + 1}`}
-                action={<Badge variant="info">{numHeads} heads</Badge>}
+                action={<Badge variant="purple">{numHeads} heads</Badge>}
               />
               <CardContent>
                 <div className="space-y-2">

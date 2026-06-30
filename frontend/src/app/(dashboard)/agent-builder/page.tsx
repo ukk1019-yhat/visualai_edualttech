@@ -8,12 +8,12 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
 const nodeTypes = [
-  { type: 'prompt', label: 'Prompt', icon: <IconNote size={16} />, color: 'from-[#082C4E] to-blue-600', desc: 'User input entry point' },
-  { type: 'planner', label: 'Planner', icon: <IconClipboard size={16} />, color: 'from-purple-500 to-[#8B5CF6]', desc: 'Break down tasks' },
-  { type: 'research', label: 'Research', icon: <IconSearch size={16} />, color: 'from-emerald-500 to-[#16A34A]', desc: 'Search & retrieve info' },
+  { type: 'prompt', label: 'Prompt', icon: <IconNote size={16} />, color: 'from-[var(--neon-blue)] to-blue-600', desc: 'User input entry point' },
+  { type: 'planner', label: 'Planner', icon: <IconClipboard size={16} />, color: 'from-purple-500 to-[var(--neon-purple)]', desc: 'Break down tasks' },
+  { type: 'research', label: 'Research', icon: <IconSearch size={16} />, color: 'from-emerald-500 to-[var(--neon-green)]', desc: 'Search & retrieve info' },
   { type: 'coder', label: 'Coder', icon: <IconCode size={16} />, color: 'from-orange-500 to-red-500', desc: 'Write & execute code' },
   { type: 'reviewer', label: 'Reviewer', icon: <IconCheck size={16} />, color: 'from-yellow-500 to-amber-600', desc: 'Validate output quality' },
-  { type: 'output', label: 'Output', icon: <IconRocket size={16} />, color: 'from-[#16A34A] to-emerald-600', desc: 'Final response' },
+  { type: 'output', label: 'Output', icon: <IconRocket size={16} />, color: 'from-[var(--neon-green)] to-emerald-600', desc: 'Final response' },
 ];
 
 interface AgentNode {
@@ -26,12 +26,12 @@ interface AgentNode {
 }
 
 const nodeColors: Record<string, string> = {
-  prompt: 'from-[#082C4E] to-blue-600',
-  planner: 'from-purple-500 to-[#8B5CF6]',
-  research: 'from-emerald-500 to-[#16A34A]',
+  prompt: 'from-[var(--neon-blue)] to-blue-600',
+  planner: 'from-purple-500 to-[var(--neon-purple)]',
+  research: 'from-emerald-500 to-[var(--neon-green)]',
   coder: 'from-orange-500 to-red-500',
   reviewer: 'from-yellow-500 to-amber-600',
-  output: 'from-[#16A34A] to-emerald-600',
+  output: 'from-[var(--neon-green)] to-emerald-600',
 };
 
 const defaultNodes: AgentNode[] = [
