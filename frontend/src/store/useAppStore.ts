@@ -29,9 +29,9 @@ export const useAppStore = create<AppState>((set) => ({
   processingSteps: [],
   currentPrompt: '',
   isProcessing: false,
-  selectedModel: 'gemma-2-9b-it',
+  selectedModel: 'gemma-4-31b-it',
   modelConfigs: [
-    { id: 'google-gemma', name: 'Google Gemma', provider: 'google', models: ['gemma-2-2b-it', 'gemma-2-9b-it', 'gemma-2-27b-it'] },
+    { id: 'google-gemma', name: 'Google Gemma', provider: 'google', models: ['gemma-4-31b-it', 'gemma-4-26b-a4b-it', 'gemma-3-12b-it'] },
     { id: 'nvidia', name: 'NVIDIA', provider: 'nvidia', models: ['nemotron-70b'] },
     { id: 'meta', name: 'Meta', provider: 'meta', models: ['llama-3.1-70b', 'llama-3.1-8b'] },
     { id: 'mistral', name: 'Mistral', provider: 'mistral', models: ['mistral-large'] },

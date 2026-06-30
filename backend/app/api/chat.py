@@ -11,7 +11,7 @@ ai_service = AIService()
 
 class ChatRequest(BaseModel):
     prompt: str
-    model: str = "google/gemma-2-9b-it"
+    model: str = "google/gemma-4-31b-it:free"
     stream: bool = False
 
 

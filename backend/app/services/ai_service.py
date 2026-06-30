@@ -23,9 +23,9 @@ class AIService:
 
     def _map_model(self, model: str) -> str:
         model_mapping = {
-            "gemma-2-2b-it": "google/gemma-2-2b-it",
-            "gemma-2-9b-it": "google/gemma-2-9b-it",
-            "gemma-2-27b-it": "google/gemma-2-27b-it",
+            "gemma-4-31b-it": "google/gemma-4-31b-it:free",
+            "gemma-4-26b-a4b-it": "google/gemma-4-26b-a4b-it:free",
+            "gemma-3-12b-it": "google/gemma-3-12b-it",
             "gpt-4o": "openai/gpt-4o",
             "gpt-4o-mini": "openai/gpt-4o-mini",
             "gpt-4-turbo": "openai/gpt-4-turbo",
@@ -39,7 +39,6 @@ class AIService:
             "llama-3.1-8b": "meta-llama/llama-3.1-8b-instruct",
             "mistral-large": "mistralai/mistral-large",
         }
-        # If it already has a slash, pass through as-is
         if "/" in model:
             return model
         return model_mapping.get(model, f"openai/{model}")
@@ -51,7 +50,7 @@ class AIService:
     async def generate(
         self,
         prompt: str,
-        model: str = "google/gemma-2-9b-it",
+        model: str = "google/gemma-4-31b-it:free",
         max_tokens: Optional[int] = 2048,
     ) -> dict:
         await self._init_openrouter()
@@ -99,9 +98,9 @@ class AIService:
 
     def _calculate_cost(self, model: str, prompt_tokens: int, completion_tokens: int) -> float:
         pricing = {
-            "google/gemma-2-2b-it": {"input": 0.0, "output": 0.0},
-            "google/gemma-2-9b-it": {"input": 0.0, "output": 0.0},
-            "google/gemma-2-27b-it": {"input": 0.0, "output": 0.0},
+            "google/gemma-4-31b-it:free": {"input": 0.0, "output": 0.0},
+            "google/gemma-4-26b-a4b-it:free": {"input": 0.0, "output": 0.0},
+            "google/gemma-3-12b-it": {"input": 0.0, "output": 0.0},
             "openai/gpt-4o": {"input": 0.0000025, "output": 0.00001},
             "openai/gpt-4o-mini": {"input": 0.00000015, "output": 0.0000006},
             "anthropic/claude-3-opus": {"input": 0.000015, "output": 0.000075},

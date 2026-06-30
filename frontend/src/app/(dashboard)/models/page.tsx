@@ -9,25 +9,25 @@ import { Tabs } from '@/components/ui/Tabs';
 
 const allModels = [
   {
-    id: 'gemma-2-2b-it', name: 'Gemma 2 2B', provider: 'Google', icon: '💎',
-    latency: '0.4s', cost: 'Free', context: '8K',
-    capabilities: ['Free', 'Fast', 'Open Source', 'On-device'],
+    id: 'gemma-4-31b-it', name: 'Gemma 4 31B', provider: 'Google', icon: '💎',
+    latency: '0.8s', cost: 'Free', context: '1M',
+    capabilities: ['Free', '1M Context', 'Latest', 'Reasoning'],
     color: 'from-blue-400 to-cyan-400',
-    description: 'Google\'s lightweight open model, free on OpenRouter. Perfect for fast prototyping.',
+    description: 'Google\'s latest Gemma 4 flagship with 1M context window — free tier on OpenRouter.',
   },
   {
-    id: 'gemma-2-9b-it', name: 'Gemma 2 9B', provider: 'Google', icon: '💎',
-    latency: '0.6s', cost: 'Free', context: '8K',
-    capabilities: ['Free', 'Balanced', 'Open Source', 'Reasoning'],
+    id: 'gemma-4-26b-a4b-it', name: 'Gemma 4 26B', provider: 'Google', icon: '💎',
+    latency: '0.6s', cost: 'Free', context: '1M',
+    capabilities: ['Free', 'MoE', '1M Context', 'Efficient'],
     color: 'from-blue-500 to-cyan-500',
-    description: 'Google\'s efficient open model with strong quality-to-size ratio, free on OpenRouter.',
+    description: 'Google\'s MoE Gemma 4 model — fast, efficient, free on OpenRouter.',
   },
   {
-    id: 'gemma-2-27b-it', name: 'Gemma 2 27B', provider: 'Google', icon: '💎',
-    latency: '0.9s', cost: 'Free', context: '8K',
-    capabilities: ['Free', 'Powerful', 'Open Source', 'Reasoning'],
+    id: 'gemma-3-12b-it', name: 'Gemma 3 12B', provider: 'Google', icon: '💎',
+    latency: '0.5s', cost: 'Free', context: '128K',
+    capabilities: ['Free', 'Fast', 'Open Source', 'Balanced'],
     color: 'from-blue-600 to-cyan-600',
-    description: 'Google\'s largest open Gemma model with top-tier performance, free on OpenRouter.',
+    description: 'Google\'s well-rounded open model with strong quality.',
   },
   {
     id: 'nemotron-70b', name: 'Nemotron 70B', provider: 'NVIDIA', icon: '🟢',
@@ -53,7 +53,7 @@ const allModels = [
 ];
 
 export default function ModelsPage() {
-  const [selected, setSelected] = useState('gemma-2-9b-it');
+  const [selected, setSelected] = useState('gemma-4-31b-it');
   const [filter, setFilter] = useState('all');
 
   const filtered = filter === 'all' ? allModels : allModels.filter((m) => m.provider.toLowerCase() === filter);

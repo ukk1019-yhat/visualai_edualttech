@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     OPENROUTER_SITE_NAME: str = "NeuralFlow"
 
     # Default model
-    DEFAULT_MODEL: str = "google/gemma-2-9b-it"
+    DEFAULT_MODEL: str = "google/gemma-4-31b-it:free"
 
     class Config:
         env_file = ".env"

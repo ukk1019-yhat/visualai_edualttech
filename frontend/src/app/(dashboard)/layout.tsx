@@ -38,9 +38,9 @@ const navGroups = [
 ];
 
 const models = [
-  { value: 'gemma-2-2b-it', label: 'Gemma 2 2B' },
-  { value: 'gemma-2-9b-it', label: 'Gemma 2 9B' },
-  { value: 'gemma-2-27b-it', label: 'Gemma 2 27B' },
+  { value: 'gemma-4-31b-it', label: 'Gemma 4 31B' },
+  { value: 'gemma-4-26b-a4b-it', label: 'Gemma 4 26B' },
+  { value: 'gemma-3-12b-it', label: 'Gemma 3 12B' },
   { value: 'nemotron-70b', label: 'Nemotron 70B' },
   { value: 'llama-3.1-70b', label: 'Llama 3.1 70B' },
 ];
@@ -184,7 +184,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex items-center gap-3">
             <select
               className="bg-muted border border-border rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary max-w-[140px] sm:max-w-none"
-              defaultValue="gemma-2-9b-it"
+              defaultValue="gemma-4-31b-it"
             >
               {models.map((m) => (
                 <option key={m.value} value={m.value}>{m.label}</option>
