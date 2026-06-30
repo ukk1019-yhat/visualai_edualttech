@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { IconReceive, IconTokens, IconEmbed, IconTarget, IconZap, IconBrain, IconShield, IconSparkles, IconSearch, IconClock, IconWrench, IconChart, IconCheck } from '@/components/ui/Icons';
+import { useTheme } from '@/components/ThemeProvider';
 
 const pipelineSteps: { label: string; duration: number; icon: ReactNode }[] = [
   { label: 'Receiving Prompt', duration: 600, icon: <IconReceive size={14} /> },
@@ -68,6 +69,7 @@ export default function LandingPage() {
             <span className="font-bold text-lg tracking-tight">NeuralFlow</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
+            <ThemeToggleLanding />
             <Link href="/playground/chat" className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors">Playground</Link>
             <Link href="/visualizations" className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors">Visualizations</Link>
             <Link href="/learn" className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors">Learn</Link>
@@ -257,6 +259,35 @@ export default function LandingPage() {
 
 function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(' ');
+}
+
+function ThemeToggleLanding() {
+  const { theme, toggle } = useTheme();
+  return (
+    <button
+      onClick={toggle}
+      className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
+      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+    >
+      {theme === 'dark' ? (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+      ) : (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      )}
+    </button>
+  );
 }
 
 const features = [

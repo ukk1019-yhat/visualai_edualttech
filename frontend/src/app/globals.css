@@ -48,6 +48,29 @@
   --neon-purple: #8b5cf6;
 }
 
+.light {
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --accent: #0891b2;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #64748b;
+  --sidebar-hover: #f1f5f9;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --neon-blue: #2563eb;
+  --neon-green: #16a34a;
+  --neon-purple: #7c3aed;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -104,6 +127,11 @@ body {
   background: rgba(17, 17, 24, 0.8);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(39, 39, 42, 0.5);
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(226, 232, 240, 0.8);
 }
 
 .glass-hover:hover {
