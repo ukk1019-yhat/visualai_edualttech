@@ -77,11 +77,15 @@ export default function ChatPage() {
     setInput('');
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
       const res = await fetch(getApiUrl('/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: promptText, model: 'nvidia/nemotron-3-ultra-550b-a55b:free' }),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (res.ok) {
         const data = await res.json();
@@ -111,9 +115,12 @@ export default function ChatPage() {
       await animateSteps([]);
       const errMsg = err instanceof Error ? err.message : 'Request failed';
       const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const isTimeout = err instanceof DOMException && err.name === 'AbortError';
       const hint = isLocal
         ? 'Make sure the backend server is running on port 8000 (`uvicorn app.main:app --reload --port 8000` from backend/)'
-        : 'The backend at neuralflow-backend.vercel.app is not responding. Try again in a moment.';
+        : isTimeout
+        ? 'The backend took too long to respond (cold start). Please try again.'
+        : 'The backend is waking up (cold start). Please wait a moment and try again.';
       const finalText = await streamText(`(!) Error: ${errMsg}. ${hint}`);
       setMessages((prev) => [
         ...prev,
