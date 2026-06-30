@@ -1,19 +1,14 @@
 {
-  "experimentalServices": {
-    "frontend": {
-      "entrypoint": "frontend",
-      "routePrefix": "/",
-      "framework": "nextjs"
-    },
-    "backend": {
-      "entrypoint": "backend",
-      "routePrefix": "/_/backend"
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
     }
-  },
+  ],
   "rewrites": [
     {
-      "source": "/api/backend/(.*)",
-      "destination": "/_/backend/api/$1"
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
   ]
 }

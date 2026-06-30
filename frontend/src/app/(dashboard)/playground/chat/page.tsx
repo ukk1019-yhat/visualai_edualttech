@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { GlassCard, CardContent } from '@/components/ui/Card';
+import { getApiUrl } from '@/lib/api';
 
 const pipelineSteps = [
   { id: 'tokenize', label: 'Tokenizing', icon: '🔤' },
@@ -75,7 +76,7 @@ export default function ChatPage() {
     setInput('');
 
     try {
-      const res = await fetch('/api/backend/chat', {
+      const res = await fetch(getApiUrl('/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: promptText, model: 'nvidia/nemotron-3-ultra-550b-a55b:free' }),

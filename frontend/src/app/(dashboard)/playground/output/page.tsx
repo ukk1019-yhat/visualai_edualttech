@@ -6,6 +6,7 @@ import { GlassCard, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { getApiUrl } from '@/lib/api';
 
 export default function OutputPage() {
   const [prompt, setPrompt] = useState('What is gravity?');
@@ -24,7 +25,7 @@ export default function OutputPage() {
     setStats([]);
 
     try {
-      const res = await fetch('/api/backend/chat', {
+      const res = await fetch(getApiUrl('/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, model: 'nvidia/nemotron-3-ultra-550b-a55b:free' }),
