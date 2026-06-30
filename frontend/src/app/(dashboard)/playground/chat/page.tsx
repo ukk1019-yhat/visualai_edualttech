@@ -23,6 +23,10 @@ interface Message {
   model?: string;
 }
 
+function stripMarkdown(text: string) {
+  return text.replace(/^###\s*/gm, '').replace(/\*\*/g, '');
+}
+
 export default function ChatPage() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
@@ -81,7 +85,8 @@ export default function ChatPage() {
         const data = await res.json();
         const durations = (data.processing_steps || []).map((s: { duration: number }) => s.duration);
         await animateSteps(durations);
-        const finalText = await streamText(data.content);
+        const cleaned = stripMarkdown(data.content);
+        const finalText = await streamText(cleaned);
         setMessages((prev) => [
           ...prev,
           {
