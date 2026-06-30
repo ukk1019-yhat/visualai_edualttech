@@ -504,7 +504,7 @@ function RAGDiagram() {
 
       {/* Embed */}
       <rect x="45" y="110" width="150" height="36" rx="8" fill="#1e293b" stroke="#475569" strokeWidth="0.5"/>
-      <text x="120" y="133" textAnchor="middle" fontSize="9" fill="#e2e8f0">🔍 Embed Query</text>
+      <text x="120" y="133" textAnchor="middle" fontSize="9" fill="#e2e8f0">Embed Query</text>
 
       <path d="M120 84 L120 110" stroke="#475569" strokeWidth="1" fill="none"/>
 
@@ -710,13 +710,13 @@ function AITimeline() {
 
 function LLMPipeline({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (i: number) => void }) {
   const steps = [
-    { label: 'Prompt', icon: '💬', desc: 'Your input text' },
-    { label: 'Tokenizer', icon: '🔤', desc: 'Split into tokens' },
-    { label: 'Embeddings', icon: '🌌', desc: 'Convert to vectors' },
+    { label: 'Prompt', icon: 'IN', desc: 'Your input text' },
+    { label: 'Tokenizer', icon: 'TK', desc: 'Split into tokens' },
+    { label: 'Embeddings', icon: 'EM', desc: 'Convert to vectors' },
     { label: 'Transformer', icon: '⚡', desc: 'Process through layers' },
-    { label: 'Attention', icon: '🎯', desc: 'Focus on relevant tokens' },
-    { label: 'Reasoning', icon: '🧠', desc: 'Generate understanding' },
-    { label: 'Output', icon: '📄', desc: 'Final response' },
+    { label: 'Attention', icon: 'AT', desc: 'Focus on relevant tokens' },
+    { label: 'Reasoning', icon: 'NN', desc: 'Generate understanding' },
+    { label: 'Output', icon: 'OU', desc: 'Final response' },
   ];
   const boxW = 76;
   const boxH = 44;
@@ -766,13 +766,13 @@ function LLMPipeline({ activeStep, setActiveStep }: { activeStep: number; setAct
 
 function InsideAIMind({ activeStep }: { activeStep: number }) {
   const steps = [
-    { label: 'Prompt Received', color: '#34d399', icon: '🟢' },
-    { label: 'Tokenization', color: '#3b82f6', icon: '🔵' },
-    { label: 'Embedding Space', color: '#a78bfa', icon: '🟣' },
-    { label: 'Attention Between Tokens', color: '#f97316', icon: '🟠' },
-    { label: 'Transformer Layers', color: '#fbbf24', icon: '🟡' },
-    { label: 'Next Token Prediction', color: '#ef4444', icon: '🔴' },
-    { label: 'Final Response', color: '#34d399', icon: '🟢' },
+    { label: 'Prompt Received', color: '#34d399', icon: '>' },
+    { label: 'Tokenization', color: '#3b82f6', icon: '>' },
+    { label: 'Embedding Space', color: '#a78bfa', icon: '>' },
+    { label: 'Attention Between Tokens', color: '#f97316', icon: '>' },
+    { label: 'Transformer Layers', color: '#fbbf24', icon: '>' },
+    { label: 'Next Token Prediction', color: '#ef4444', icon: '>' },
+    { label: 'Final Response', color: '#34d399', icon: '>' },
   ];
   const boxW = 120;
   const boxH = 36;
@@ -782,7 +782,7 @@ function InsideAIMind({ activeStep }: { activeStep: number }) {
   return (
     <svg viewBox="0 0 610 340" className="w-full max-w-2xl mx-auto" xmlns="http://www.w3.org/2000/svg">
       <rect x="40" y="10" width="530" height="320" rx="12" fill="#0f172a" stroke="#334155" strokeWidth="1"/>
-      <text x="305" y="30" textAnchor="middle" fontSize="11" fill="#94a3b8" fontWeight="600">🧠 Inside the AI's Mind — Live Pipeline</text>
+      <text x="305" y="30" textAnchor="middle" fontSize="11" fill="#94a3b8" fontWeight="600">Inside the AI's Mind — Live Pipeline</text>
       {steps.map((s, i) => {
         const y = startY + i * (boxH + gap);
         const isActive = i === activeStep;
@@ -837,12 +837,12 @@ type Lesson = {
 };
 
 const categories = [
-  { id: 'fundamentals', label: 'AI Fundamentals', icon: '📚', desc: 'Core concepts for beginners' },
-  { id: 'how-llm-works', label: 'How an LLM Works', icon: '⚡', desc: 'The full pipeline explained' },
-  { id: 'deep-dives', label: 'Deep Dives', icon: '🔬', desc: 'Advanced technical topics' },
-  { id: 'interactive', label: 'Interactive Labs', icon: '🎮', desc: 'Hands-on AI exploration' },
-  { id: 'ethics', label: 'AI Ethics', icon: '⚖️', desc: 'Responsible AI development' },
-  { id: 'challenges', label: 'Challenges', icon: '🏆', desc: 'Test your knowledge' },
+  { id: 'fundamentals', label: 'AI Fundamentals', icon: 'AF', desc: 'Core concepts for beginners' },
+  { id: 'how-llm-works', label: 'How an LLM Works', icon: 'LL', desc: 'The full pipeline explained' },
+  { id: 'deep-dives', label: 'Deep Dives', icon: 'DD', desc: 'Advanced technical topics' },
+  { id: 'interactive', label: 'Interactive Labs', icon: 'IL', desc: 'Hands-on AI exploration' },
+  { id: 'ethics', label: 'AI Ethics', icon: 'AE', desc: 'Responsible AI development' },
+  { id: 'challenges', label: 'Challenges', icon: 'CH', desc: 'Test your knowledge' },
 ];
 
 const lessons: Lesson[] = [
@@ -850,7 +850,7 @@ const lessons: Lesson[] = [
     id: 'attention',
     title: 'What is Attention?',
     desc: 'Learn how attention mechanisms work in transformers to focus on relevant parts of input.',
-    icon: '🎯',
+    icon: 'AT',
     duration: '10 min',
     level: 'Beginner',
     category: 'deep-dives',
@@ -909,7 +909,7 @@ const lessons: Lesson[] = [
     id: 'tokenization',
     title: 'Tokenization 101',
     desc: 'How text gets split into tokens for AI processing.',
-    icon: '🔤',
+    icon: 'TK',
     duration: '8 min',
     level: 'Beginner',
     category: 'deep-dives',
@@ -965,7 +965,7 @@ const lessons: Lesson[] = [
     id: 'neural-networks',
     title: 'Neural Networks',
     desc: 'The building blocks of modern AI explained visually.',
-    icon: '🧠',
+    icon: 'NN',
     duration: '15 min',
     level: 'Intermediate',
     category: 'deep-dives',
@@ -1078,7 +1078,7 @@ const lessons: Lesson[] = [
     id: 'embeddings',
     title: 'Embeddings & Vectors',
     desc: 'How words become numbers that AI can understand.',
-    icon: '🌌',
+    icon: 'EM',
     duration: '12 min',
     level: 'Intermediate',
     category: 'deep-dives',
@@ -1132,7 +1132,7 @@ const lessons: Lesson[] = [
     id: 'rl',
     title: 'Reinforcement Learning',
     desc: 'How AI learns from rewards, feedback, and interaction.',
-    icon: '🏆',
+    icon: 'RL',
     duration: '18 min',
     level: 'Advanced',
     category: 'deep-dives',
@@ -1191,7 +1191,7 @@ const lessons: Lesson[] = [
     id: 'diffusion',
     title: 'Diffusion Models',
     desc: 'How AI generates images by learning to reverse a noise process.',
-    icon: '🎨',
+    icon: 'DF',
     duration: '20 min',
     level: 'Advanced',
     category: 'deep-dives',
@@ -1237,7 +1237,7 @@ const lessons: Lesson[] = [
     id: 'rag',
     title: 'Retrieval-Augmented Generation',
     desc: 'How AI searches external knowledge to answer accurately.',
-    icon: '🔍',
+    icon: 'RG',
     duration: '15 min',
     level: 'Intermediate',
     category: 'deep-dives',
@@ -1283,7 +1283,7 @@ const lessons: Lesson[] = [
     id: 'moe',
     title: 'Mixture of Experts (MoE)',
     desc: 'How models scale to trillions of parameters while staying efficient.',
-    icon: '🧩',
+    icon: 'MO',
     duration: '15 min',
     level: 'Advanced',
     category: 'deep-dives',
@@ -1329,7 +1329,7 @@ const lessons: Lesson[] = [
     id: 'finetuning',
     title: 'Fine-Tuning & PEFT',
     desc: 'How to adapt pretrained models to custom tasks without training from scratch.',
-    icon: '🔧',
+    icon: 'FT',
     duration: '18 min',
     level: 'Intermediate',
     category: 'deep-dives',
@@ -1375,7 +1375,7 @@ const lessons: Lesson[] = [
     id: 'ai-fundamentals',
     title: 'AI Fundamentals',
     desc: 'Core concepts — what AI is, its history, and the different types that exist today.',
-    icon: '📚',
+    icon: 'AF',
     duration: '15 min',
     level: 'Beginner',
     category: 'fundamentals',
@@ -1553,7 +1553,7 @@ const lessons: Lesson[] = [
     id: 'ai-challenges',
     title: 'AI Challenges',
     desc: 'Hands-on exercises to test and improve your AI skills.',
-    icon: '🏆',
+    icon: 'AC',
     duration: '25 min',
     level: 'Intermediate',
     category: 'challenges',
@@ -1563,9 +1563,9 @@ const lessons: Lesson[] = [
         visual: 'explanation',
         content: 'A vague prompt gives bad results. Your challenge: improve this prompt step by step.',
         items: [
-          { term: '❌ Bad Prompt', def: '"Tell me about AI" — too broad, the model doesn\'t know what angle you want.', color: '#ef4444' },
-          { term: '📝 Add Context', def: '"Explain neural networks to a 10-year-old" — gives audience and tone guidance.', color: '#fbbf24' },
-          { term: '✅ Add Format', def: '"Explain how transformers work in 3 bullet points, then give a 2-sentence summary for a non-technical audience." — specific structure, dual audience, clear constraints.', color: '#34d399' },
+          { term: '[BAD] Bad Prompt', def: '"Tell me about AI" — too broad, the model doesn\'t know what angle you want.', color: '#ef4444' },
+          { term: '[ADD] Add Context', def: '"Explain neural networks to a 10-year-old" — gives audience and tone guidance.', color: '#fbbf24' },
+          { term: '[GOOD] Add Format', def: '"Explain how transformers work in 3 bullet points, then give a 2-sentence summary for a non-technical audience." — specific structure, dual audience, clear constraints.', color: '#34d399' },
         ],
         tip: 'Try: add role ("You are a physics professor"), add format ("table comparing X and Y"), add constraints ("in 50 words or less"), and add examples. Each addition improves output quality.',
       },
@@ -1851,14 +1851,14 @@ export default function LearnPage() {
 
                     {lesson.sections[activeSection].note && (
                       <div className="mt-4 flex items-start gap-2 p-3 rounded-lg bg-[var(--neon-blue)]/5 border border-[var(--neon-blue)]/10">
-                        <span className="text-sm shrink-0">💡</span>
+                        <span className="text-xs font-bold text-[var(--neon-blue)] shrink-0">NOTE</span>
                         <p className="text-xs text-muted-foreground">{lesson.sections[activeSection].note}</p>
                       </div>
                     )}
 
                     {lesson.sections[activeSection].tip && (
                       <div className="mt-4 flex items-start gap-2 p-3 rounded-lg bg-[var(--neon-green)]/5 border border-[var(--neon-green)]/10">
-                        <span className="text-sm shrink-0">⚡</span>
+                        <span className="text-xs font-bold text-[var(--neon-green)] shrink-0">TIP</span>
                         <p className="text-xs text-muted-foreground">{lesson.sections[activeSection].tip}</p>
                       </div>
                     )}
