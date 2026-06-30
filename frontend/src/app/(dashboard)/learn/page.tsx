@@ -30,6 +30,26 @@ const nodeColors = {
   pink: 'from-pink-500 to-rose-600',
 };
 
+const icons: Record<string, JSX.Element> = {
+  AF: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><polygon points="12,3 21,7.5 21,16.5 12,21 3,16.5 3,7.5"/><circle cx="12" cy="12" r="2"/></svg>,
+  LL: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>,
+  DD: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><circle cx="10.5" cy="10.5" r="6"/><line x1="15" y1="15" x2="21" y2="21"/></svg>,
+  IL: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><polygon points="6,4 20,12 6,20"/></svg>,
+  AE: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 2L3 6v6c0 5.25 3.83 10.15 9 12 5.17-1.85 9-6.75 9-12V6l-9-4z"/><path d="M9 12l2 2 4-4"/></svg>,
+  CH: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>,
+  AT: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+  TK: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><line x1="6" y1="5" x2="18" y2="5"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="8" y1="19" x2="16" y2="19"/></svg>,
+  NN: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/><line x1="7" y1="19" x2="17" y2="19"/></svg>,
+  TF: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 3v18"/><polyline points="7 8 12 3 17 8"/><polyline points="7 16 12 21 17 16"/></svg>,
+  EM: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><circle cx="6" cy="6" r="1.5"/><circle cx="12" cy="6" r="1.5"/><circle cx="18" cy="6" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/><circle cx="6" cy="18" r="1.5"/><circle cx="12" cy="18" r="1.5"/><circle cx="18" cy="18" r="1.5"/></svg>,
+  RL: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 9 15 9"/></svg>,
+  DF: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="10"/></svg>,
+  RG: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><circle cx="15" cy="8" r="2.5"/><line x1="17" y1="10" x2="19" y2="12"/></svg>,
+  MO: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="8" y="14" width="8" height="8" rx="1"/><line x1="10" y1="6" x2="14" y2="6"/><line x1="12" y1="10" x2="12" y2="14"/></svg>,
+  FT: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><circle cx="4" cy="12" r="2"/><line x1="12" y1="21" x2="12" y2="9"/><line x1="12" y1="5" x2="12" y2="3"/><circle cx="12" cy="7" r="2"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><circle cx="20" cy="14" r="2"/></svg>,
+  AC: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M6 9H4a2 2 0 01-2-2V5a2 2 0 012-2h2"/><path d="M18 9h2a2 2 0 002-2V5a2 2 0 00-2-2h-2"/><path d="M6 2h12v7a6 6 0 11-12 0V2z"/><path d="M12 15v-3"/><circle cx="12" cy="19" r="1.5"/></svg>,
+};
+
 function AttentionDiagram() {
   return (
     <svg viewBox="0 0 600 280" className="w-full max-w-2xl mx-auto" xmlns="http://www.w3.org/2000/svg">
@@ -1708,7 +1728,7 @@ export default function LearnPage() {
               >
                 <GlassCard hover onClick={() => setActiveCategory(cat.id)}>
                   <CardContent>
-                    <div className="text-2xl mb-3">{cat.icon}</div>
+                    <div className="flex items-center justify-center w-8 h-8 mb-3 text-[var(--neon-blue)]">{icons[cat.icon]}</div>
                     <h3 className="font-semibold text-sm mb-1">{cat.label}</h3>
                     <p className="text-xs text-muted-foreground mb-3">{cat.desc}</p>
                     <div className="flex items-center justify-between">
@@ -1735,7 +1755,7 @@ export default function LearnPage() {
               <Button variant="ghost" size="sm" onClick={() => setActiveCategory(null)}>
                 ← All Topics
               </Button>
-              <span className="text-2xl">{categories.find((c) => c.id === activeCategory)?.icon}</span>
+              <span className="inline-flex items-center justify-center w-8 h-8 text-[var(--neon-blue)]">{icons[categories.find((c) => c.id === activeCategory)?.icon ?? '']}</span>
               <div>
                 <h2 className="font-bold text-lg">{categories.find((c) => c.id === activeCategory)?.label}</h2>
                 <p className="text-xs text-muted-foreground">{categories.find((c) => c.id === activeCategory)?.desc}</p>
@@ -1752,7 +1772,7 @@ export default function LearnPage() {
                 >
                   <GlassCard hover onClick={() => { setActiveLesson(l.id); setActiveSection(0); }}>
                     <CardContent>
-                      <div className="text-2xl mb-3">{l.icon}</div>
+                      <div className="flex items-center justify-center w-8 h-8 mb-3 text-[var(--neon-blue)]">{icons[l.icon]}</div>
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold text-sm">{l.title}</h3>
                         <Badge variant={l.level === 'Beginner' ? 'success' : l.level === 'Intermediate' ? 'warning' : 'danger'} className="text-[10px]">{l.level}</Badge>
@@ -1783,7 +1803,7 @@ export default function LearnPage() {
               <Button variant="ghost" size="sm" onClick={() => { setActiveLesson(null); setMindStep(0); }}>
                 ← {activeCategory ? 'Lessons' : 'Topics'}
               </Button>
-              <span className="text-2xl">{lesson.icon}</span>
+              <span className="inline-flex items-center justify-center w-8 h-8 text-[var(--neon-blue)]">{icons[lesson.icon]}</span>
               <div>
                 <h2 className="font-bold text-lg">{lesson.title}</h2>
                 <p className="text-xs text-muted-foreground">{lesson.desc}</p>
