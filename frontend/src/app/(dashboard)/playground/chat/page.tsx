@@ -25,7 +25,7 @@ interface Message {
 }
 
 function stripMarkdown(text: string) {
-  return text.replace(/^###\s*/gm, '').replace(/\*\*/g, '');
+  return text.replace(/^#{1,3}\s*/gm, '').replace(/\*\*/g, '');
 }
 
 export default function ChatPage() {
@@ -138,7 +138,7 @@ export default function ChatPage() {
                     msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'glass'
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed text-justify">{msg.content}</p>
                   {msg.stats && (
                     <div className="mt-3 pt-3 border-t border-border/50 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                       {msg.stats.map((s) => (
@@ -156,7 +156,7 @@ export default function ChatPage() {
           {streamingText && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
               <div className="max-w-[85%] glass rounded-2xl px-4 py-3">
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                <p className="text-sm whitespace-pre-wrap leading-relaxed text-justify">
                   {streamingText}
                   <motion.span
                     animate={{ opacity: [0, 1, 0] }}

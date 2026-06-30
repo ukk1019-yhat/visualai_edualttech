@@ -8,6 +8,10 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { getApiUrl } from '@/lib/api';
 
+function stripMarkdown(text: string) {
+  return text.replace(/^#{1,3}\s*/gm, '').replace(/\*\*/g, '');
+}
+
 export default function OutputPage() {
   const [prompt, setPrompt] = useState('What is gravity?');
   const [loading, setLoading] = useState(false);
@@ -36,7 +40,7 @@ export default function OutputPage() {
       }
 
       const data = await res.json();
-      const fullText = data.content || '';
+      const fullText = stripMarkdown(data.content || '');
       const chars = fullText.split('');
 
       for (let i = 0; i < chars.length; i++) {
@@ -102,7 +106,7 @@ export default function OutputPage() {
             }
           />
           <CardContent>
-            <div className="font-mono text-sm sm:text-base leading-relaxed min-h-[200px]">
+            <div className="font-mono text-sm sm:text-base leading-relaxed text-justify min-h-[200px]">
               {error ? (
                 <span className="text-red-400 text-sm">{error}</span>
               ) : displayedText ? (
