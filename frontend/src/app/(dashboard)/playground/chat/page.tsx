@@ -75,7 +75,7 @@ export default function ChatPage() {
     setInput('');
 
     try {
-      const res = await fetch('/api/backend/chat', {
+      const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: promptText, model: 'nvidia/nemotron-3-ultra-550b-a55b:free' }),
