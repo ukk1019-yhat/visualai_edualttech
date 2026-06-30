@@ -1653,7 +1653,7 @@ function KeyPoints({ points }: { points: { label: string; desc: string; color: s
             <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${p.color}`} />
             <span className="font-semibold text-xs">{p.label}</span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">{p.desc}</p>
+          <p className="text-xs text-foreground/80 leading-relaxed">{p.desc}</p>
         </motion.div>
       ))}
     </div>
@@ -1668,7 +1668,7 @@ function ItemsList({ items }: { items: { term: string; def: string; color: strin
           <div className="w-2 h-2 rounded-full mt-1 shrink-0" style={{ backgroundColor: item.color }} />
           <div className="min-w-0">
             <span className="text-xs font-semibold" style={{ color: item.color }}>{item.term}</span>
-            <p className="text-xs text-muted-foreground mt-0.5">{item.def}</p>
+            <p className="text-xs text-foreground/80 mt-0.5">{item.def}</p>
           </div>
         </div>
       ))}
@@ -1684,7 +1684,7 @@ function StepsList({ steps }: { steps: string[] }) {
           <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold shrink-0 mt-0.5">
             {i + 1}
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">{step}</p>
+          <p className="text-xs text-foreground/80 leading-relaxed">{step}</p>
         </div>
       ))}
     </div>
@@ -1731,7 +1731,7 @@ export default function LearnPage() {
                   <CardContent>
                     <div className="flex items-center justify-center w-8 h-8 mb-3 text-[var(--neon-blue)]">{icons[cat.icon]}</div>
                     <h3 className="font-semibold text-sm mb-1">{cat.label}</h3>
-                    <p className="text-xs text-muted-foreground mb-3">{cat.desc}</p>
+                    <p className="text-xs text-foreground/80 mb-3">{cat.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-muted-foreground">{count} lessons</span>
                       <Button size="sm">Browse →</Button>
@@ -1759,7 +1759,7 @@ export default function LearnPage() {
               <span className="inline-flex items-center justify-center w-8 h-8 text-[var(--neon-blue)]">{icons[categories.find((c) => c.id === activeCategory)?.icon ?? '']}</span>
               <div>
                 <h2 className="font-bold text-lg">{categories.find((c) => c.id === activeCategory)?.label}</h2>
-                <p className="text-xs text-muted-foreground">{categories.find((c) => c.id === activeCategory)?.desc}</p>
+                <p className="text-xs text-foreground/80">{categories.find((c) => c.id === activeCategory)?.desc}</p>
               </div>
               <span className="text-xs text-muted-foreground ml-auto">{catLessons.length} lessons</span>
             </div>
@@ -1778,7 +1778,7 @@ export default function LearnPage() {
                         <h3 className="font-semibold text-sm">{l.title}</h3>
                         <Badge variant={l.level === 'Beginner' ? 'success' : l.level === 'Intermediate' ? 'warning' : 'danger'} className="text-[10px]">{l.level}</Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground mb-3">{l.desc}</p>
+                      <p className="text-xs text-foreground/80 mb-3">{l.desc}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">{l.duration}</span>
                         <Button size="sm">Start</Button>
@@ -1807,7 +1807,7 @@ export default function LearnPage() {
               <span className="inline-flex items-center justify-center w-8 h-8 text-[var(--neon-blue)]">{typeof lesson.icon === 'string' ? icons[lesson.icon] : lesson.icon}</span>
               <div>
                 <h2 className="font-bold text-lg">{lesson.title}</h2>
-                <p className="text-xs text-muted-foreground">{lesson.desc}</p>
+                <p className="text-xs text-foreground/80">{lesson.desc}</p>
               </div>
               <Badge variant={lesson.level === 'Beginner' ? 'success' : lesson.level === 'Intermediate' ? 'warning' : 'danger'} className="ml-auto">{lesson.level}</Badge>
             </div>
