@@ -80,7 +80,7 @@ export default function ChatPage() {
       const res = await fetch(getApiUrl('/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: promptText, model: 'google/gemma-4-31b-it:free' }),
+        body: JSON.stringify({ prompt: promptText, model: 'poolside/laguna-m.1:free' }),
       });
 
       if (res.ok) {
@@ -100,7 +100,7 @@ export default function ChatPage() {
               { label: 'Tokens', value: `${data.prompt_tokens || '?'} → ${data.completion_tokens || '?'}` },
               { label: 'Latency', value: `${(data.latency || 0).toFixed(0)}ms` },
               { label: 'Cost', value: `$${(data.cost || 0).toFixed(4)}` },
-              { label: 'Model', value: data.model || 'gemma-4-31b-it' },
+              { label: 'Model', value: data.model || 'laguna-m.1' },
             ],
           },
         ]);
