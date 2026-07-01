@@ -35,7 +35,7 @@ export default function ChatPage() {
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'Ask me anything and watch the AI processing pipeline come to life. Powered by Google Gemini.',
+      content: 'Ask me anything and watch the AI processing pipeline come to life. Powered by Gemma via OpenRouter.',
     },
   ]);
   const [processing, setProcessing] = useState(false);
@@ -80,7 +80,7 @@ export default function ChatPage() {
       const res = await fetch(getApiUrl('/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: promptText, model: 'gemini-2.0-flash' }),
+        body: JSON.stringify({ prompt: promptText, model: 'google/gemma-4-31b-it:free' }),
       });
 
       if (res.ok) {
@@ -100,7 +100,7 @@ export default function ChatPage() {
               { label: 'Tokens', value: `${data.prompt_tokens || '?'} → ${data.completion_tokens || '?'}` },
               { label: 'Latency', value: `${(data.latency || 0).toFixed(0)}ms` },
               { label: 'Cost', value: `$${(data.cost || 0).toFixed(4)}` },
-              { label: 'Model', value: data.model || 'gemini-2.0-flash' },
+              { label: 'Model', value: data.model || 'gemma-4-31b-it' },
             ],
           },
         ]);
@@ -237,7 +237,7 @@ export default function ChatPage() {
             <div className="mt-4 pt-4 border-t border-border">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <div className="w-2 h-2 rounded-full bg-[var(--neon-green)]" />
-                Gemini connected
+                OpenRouter connected
               </div>
             </div>
           </CardContent>

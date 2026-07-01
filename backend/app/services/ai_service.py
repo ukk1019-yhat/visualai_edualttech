@@ -7,14 +7,18 @@ from app.core.config import settings
 
 class AIService:
     def __init__(self):
-        self.client = None
+        self.openrouter_client = None
 
-    async def _init_client(self):
-        if not self.client and settings.GOOGLE_API_KEY:
+    async def _init_openrouter(self):
+        if not self.openrouter_client and settings.OPENROUTER_API_KEY:
             from openai import AsyncOpenAI
-            self.client = AsyncOpenAI(
-                api_key=settings.GOOGLE_API_KEY,
-                base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+            self.openrouter_client = AsyncOpenAI(
+                api_key=settings.OPENROUTER_API_KEY,
+                base_url=settings.OPENROUTER_BASE_URL,
+                default_headers={
+                    "HTTP-Referer": settings.OPENROUTER_SITE_URL,
+                    "X-Title": settings.OPENROUTER_SITE_NAME,
+                },
             )
 
     async def simulate_step(self, step_id: str) -> None:
@@ -24,15 +28,15 @@ class AIService:
     async def generate(
         self,
         prompt: str,
-        model: str = "gemini-2.0-flash",
+        model: str = "google/gemma-4-31b-it:free",
         max_tokens: Optional[int] = 2048,
     ) -> dict:
-        await self._init_client()
+        await self._init_openrouter()
         start = time.time()
 
-        if self.client:
+        if self.openrouter_client:
             try:
-                response = await self.client.chat.completions.create(
+                response = await self.openrouter_client.chat.completions.create(
                     model=model,
                     messages=[{"role": "user", "content": prompt}],
                     max_tokens=max_tokens,
@@ -61,7 +65,7 @@ class AIService:
                 }
 
         return {
-            "content": f"This is a simulated response to: '{prompt}'. Set GOOGLE_API_KEY in backend/.env to get real AI responses.",
+            "content": f"This is a simulated response to: '{prompt}'. Set OPENROUTER_API_KEY in backend/.env to get real AI responses.",
             "prompt_tokens": len(prompt.split()) * 2,
             "completion_tokens": 50,
             "latency": (time.time() - start) * 1000,
