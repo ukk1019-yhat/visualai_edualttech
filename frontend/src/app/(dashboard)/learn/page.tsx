@@ -739,49 +739,47 @@ function LLMPipeline({ activeStep, setActiveStep }: { activeStep: number; setAct
     { label: 'Reasoning', icon: 'NN', desc: 'Generate understanding' },
     { label: 'Output', icon: 'OU', desc: 'Final response' },
   ];
-  const boxW = 76;
-  const boxH = 44;
-  const gap = 8;
-  const totalW = steps.length * boxW + (steps.length - 1) * gap;
-  const startX = (610 - totalW) / 2;
-
+  const detailTexts = [
+    'User types a question. The raw text is the starting point of the pipeline.',
+    "The tokenizer splits text into tokens (words/subwords). Each token gets a unique ID from the model's vocabulary.",
+    'Each token ID is mapped to a high-dimensional vector (embedding). Similar tokens have similar vectors.',
+    'Embeddings flow through stacked transformer layers. Each layer refines the representation with self-attention + feed-forward.',
+    'Attention mechanisms compute relationships between all tokens. Each token "looks at" every other token to build context.',
+    'The final hidden states are decoded into a probability distribution over the vocabulary. The model predicts the next token.',
+    'Tokens are streamed out one by one, forming the response text. The process repeats for each new token until complete.',
+  ];
   return (
-    <svg viewBox="0 0 610 260" className="w-full max-w-2xl mx-auto cursor-pointer" xmlns="http://www.w3.org/2000/svg">
-      <text x="305" y="16" textAnchor="middle" fontSize="13" fill="#94a3b8" fontWeight="600">How an LLM Processes Your Prompt</text>
-      {steps.map((s, i) => {
-        const x = startX + i * (boxW + gap);
-        const isActive = i === activeStep;
-        const isDone = i < activeStep;
-        return (
-          <g key={i} onClick={() => setActiveStep(i)} style={{ cursor: 'pointer' }}>
-            <rect x={x} y="45" width={boxW} height={boxH} rx="8"
-              fill={isActive ? '#3b82f6' : isDone ? '#1e293b' : '#0f172a'}
-              stroke={isActive ? '#60a5fa' : isDone ? '#34d399' : '#334155'}
-              strokeWidth={isActive ? 2 : 1}
-            />
-            <text x={x + boxW / 2} y={60} textAnchor="middle" fontSize="14">{s.icon}</text>
-            <text x={x + boxW / 2} y={78} textAnchor="middle" fontSize="7" fill={isActive ? 'white' : '#94a3b8'}>{s.label}</text>
-            {i > 0 && (
-              <path d={`M${x - gap / 2} ${45 + boxH / 2} L${x} ${45 + boxH / 2}`} stroke={isDone ? '#34d399' : '#334155'} strokeWidth="1" fill="none"/>
-            )}
-          </g>
-        );
-      })}
-      {/* Detail panel */}
-      <rect x="80" y="110" width="450" height="120" rx="10" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-      <text x="305" y="135" textAnchor="middle" fontSize="12" fill="#60a5fa" fontWeight="bold">{steps[activeStep].label}</text>
-      <text x="305" y="155" textAnchor="middle" fontSize="9" fill="#94a3b8">{steps[activeStep].desc}</text>
-      <text x="92" y="178" fontSize="8" fill="#64748b">
-        {activeStep === 0 && 'User types a question. The raw text is the starting point of the pipeline.'}
-        {activeStep === 1 && 'The tokenizer splits text into tokens (words/subwords). Each token gets a unique ID from the model\'s vocabulary.'}
-        {activeStep === 2 && 'Each token ID is mapped to a high-dimensional vector (embedding). Similar tokens have similar vectors.'}
-        {activeStep === 3 && 'Embeddings flow through stacked transformer layers. Each layer refines the representation with self-attention + feed-forward.'}
-        {activeStep === 4 && 'Attention mechanisms compute relationships between all tokens. Each token "looks at" every other token to build context.'}
-        {activeStep === 5 && 'The final hidden states are decoded into a probability distribution over the vocabulary. The model predicts the next token.'}
-        {activeStep === 6 && 'Tokens are streamed out one by one, forming the response text. The process repeats for each new token until complete.'}
-      </text>
-      <text x="305" y="225" textAnchor="middle" fontSize="7" fill="#475569">Click any step above for details</text>
-    </svg>
+    <div className="space-y-4">
+      <p className="text-xs text-muted-foreground text-center">How an LLM Processes Your Prompt</p>
+      <div className="flex flex-wrap justify-center gap-2">
+        {steps.map((s, i) => {
+          const isActive = i === activeStep;
+          const isDone = i < activeStep;
+          return (
+            <button
+              key={i}
+              onClick={() => setActiveStep(i)}
+              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer min-w-[72px] ${
+                isActive
+                  ? 'bg-blue-600 text-white shadow-lg scale-105'
+                  : isDone
+                    ? 'bg-muted text-muted-foreground border border-emerald-500/50'
+                    : 'bg-muted/50 text-muted-foreground border border-border'
+              }`}
+            >
+              <span className="text-base">{s.icon}</span>
+              <span>{s.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      <div className="rounded-xl bg-muted border border-border p-4 text-center">
+        <p className="text-sm font-semibold text-blue-400">{steps[activeStep].label}</p>
+        <p className="text-xs text-muted-foreground mt-0.5">{steps[activeStep].desc}</p>
+        <p className="text-xs text-muted-foreground/70 mt-2">{detailTexts[activeStep]}</p>
+      </div>
+      <p className="text-[11px] text-muted-foreground/50 text-center">Click any step above for details</p>
+    </div>
   );
 }
 
