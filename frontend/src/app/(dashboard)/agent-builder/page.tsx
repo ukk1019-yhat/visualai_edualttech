@@ -8,12 +8,12 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
 const nodeTypes = [
-  { type: 'prompt', label: 'Prompt', icon: <IconNote size={16} />, color: 'from-[var(--neon-blue)] to-blue-600', desc: 'User input entry point' },
-  { type: 'planner', label: 'Planner', icon: <IconClipboard size={16} />, color: 'from-purple-500 to-[var(--neon-purple)]', desc: 'Break down tasks' },
-  { type: 'research', label: 'Research', icon: <IconSearch size={16} />, color: 'from-emerald-500 to-[var(--neon-green)]', desc: 'Search & retrieve info' },
-  { type: 'coder', label: 'Coder', icon: <IconCode size={16} />, color: 'from-orange-500 to-red-500', desc: 'Write & execute code' },
-  { type: 'reviewer', label: 'Reviewer', icon: <IconCheck size={16} />, color: 'from-yellow-500 to-amber-600', desc: 'Validate output quality' },
-  { type: 'output', label: 'Output', icon: <IconRocket size={16} />, color: 'from-[var(--neon-green)] to-emerald-600', desc: 'Final response' },
+  { type: 'prompt', label: 'Prompt', icon: <IconNote size={16} />, color: '#3b82f6', desc: 'User input entry point' },
+  { type: 'planner', label: 'Planner', icon: <IconClipboard size={16} />, color: '#9333ea', desc: 'Break down tasks' },
+  { type: 'research', label: 'Research', icon: <IconSearch size={16} />, color: '#10b981', desc: 'Search & retrieve info' },
+  { type: 'coder', label: 'Coder', icon: <IconCode size={16} />, color: '#f97316', desc: 'Write & execute code' },
+  { type: 'reviewer', label: 'Reviewer', icon: <IconCheck size={16} />, color: '#eab308', desc: 'Validate output quality' },
+  { type: 'output', label: 'Output', icon: <IconRocket size={16} />, color: '#059669', desc: 'Final response' },
 ];
 
 interface AgentNode {
@@ -26,12 +26,12 @@ interface AgentNode {
 }
 
 const nodeColors: Record<string, string> = {
-  prompt: 'from-[var(--neon-blue)] to-blue-600',
-  planner: 'from-purple-500 to-[var(--neon-purple)]',
-  research: 'from-emerald-500 to-[var(--neon-green)]',
-  coder: 'from-orange-500 to-red-500',
-  reviewer: 'from-yellow-500 to-amber-600',
-  output: 'from-[var(--neon-green)] to-emerald-600',
+  prompt: '#3b82f6',
+  planner: '#9333ea',
+  research: '#10b981',
+  coder: '#f97316',
+  reviewer: '#eab308',
+  output: '#059669',
 };
 
 const defaultNodes: AgentNode[] = [
@@ -46,15 +46,21 @@ const defaultNodes: AgentNode[] = [
 export default function AgentBuilderPage() {
   const [nodes, setNodes] = useState<AgentNode[]>(defaultNodes);
   const [dragging, setDragging] = useState<string | null>(null);
+  const [running, setRunning] = useState(false);
+
+  const handleRun = async () => {
+    setRunning(true);
+    await new Promise((r) => setTimeout(r, 1500));
+    setRunning(false);
+  };
 
   const handleMouseDown = useCallback((id: string) => setDragging(id), []);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
       if (!dragging) return;
-      const svg = (e.target as SVGElement).closest('svg');
-      if (!svg) return;
-      const rect = svg.getBoundingClientRect();
+      const target = e.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
       const x = e.clientX - rect.left - 80;
       const y = e.clientY - rect.top - 25;
       setNodes((prev) =>
@@ -90,7 +96,9 @@ export default function AgentBuilderPage() {
               >
                 Reset
               </Button>
-              <Button size="sm">Run Workflow</Button>
+              <Button size="sm" onClick={handleRun} loading={running}>
+                {running ? 'Running...' : 'Run Workflow'}
+              </Button>
             </div>
           </div>
 
@@ -134,13 +142,6 @@ export default function AgentBuilderPage() {
                     className={dragging === node.id ? 'cursor-grabbing' : 'cursor-grab'}
                     onMouseDown={() => handleMouseDown(node.id)}
                   >
-                    <defs>
-                      <linearGradient id={`node-bg-${node.id}`}>
-                        <stop offset="0%" stopColor={node.color?.split(' ')[0]?.replace('from-', '') || '#3b82f6'} />
-                        <stop offset="100%" stopColor={node.color?.split(' ')[1] || '#6366f1'} />
-                      </linearGradient>
-                    </defs>
-
                     <rect
                       x={node.x}
                       y={node.y}
@@ -158,7 +159,7 @@ export default function AgentBuilderPage() {
                       width={156}
                       height={46}
                       rx={11}
-                      fill={`url(#node-bg-${node.id})`}
+                      fill={node.color || '#3b82f6'}
                       opacity={0.12}
                     />
                     <text
@@ -167,7 +168,7 @@ export default function AgentBuilderPage() {
                       textAnchor="middle"
                       className="fill-foreground text-xs font-medium font-sans"
                     >
-                      {typeDef?.icon} {node.label}
+                      {node.label}
                     </text>
                   </motion.g>
                 );
