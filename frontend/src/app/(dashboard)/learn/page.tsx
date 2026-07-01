@@ -861,7 +861,7 @@ const categories = [
   { id: 'fundamentals', label: 'AI Fundamentals', icon: 'AF', desc: 'Core concepts for beginners' },
   { id: 'how-llm-works', label: 'How an LLM Works', icon: 'LL', desc: 'The full pipeline explained' },
   { id: 'deep-dives', label: 'Deep Dives', icon: 'DD', desc: 'Advanced technical topics' },
-  { id: 'interactive', label: 'Interactive Labs', icon: 'IL', desc: 'Hands-on AI exploration' },
+
   { id: 'ethics', label: 'AI Ethics', icon: 'AE', desc: 'Responsible AI development' },
   { id: 'challenges', label: 'Challenges', icon: 'CH', desc: 'Test your knowledge' },
 ];
