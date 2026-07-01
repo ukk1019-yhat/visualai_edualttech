@@ -77,11 +77,25 @@ export default function ChatPage() {
     setInput('');
 
     try {
-      const res = await fetch(getApiUrl('/chat'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: promptText, model: 'poolside/laguna-m.1:free' }),
-      });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 60000);
+
+      const attempt = async (retries = 0): Promise<Response> => {
+        const res = await fetch(getApiUrl('/chat'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: promptText, model: 'poolside/laguna-m.1:free' }),
+          signal: controller.signal,
+        });
+        if (!res.ok && retries < 2 && res.status >= 500) {
+          await new Promise((r) => setTimeout(r, 2000));
+          return attempt(retries + 1);
+        }
+        return res;
+      };
+
+      const res = await attempt();
+      clearTimeout(timeout);
 
       if (res.ok) {
         const data = await res.json();
